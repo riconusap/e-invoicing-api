@@ -64,11 +64,6 @@ class ContractEmployee extends Model
         return $this->belongsTo(User::class, 'deleted_by');
     }
 
-    public function employeeDocuments()
-    {
-        return $this->hasMany(EmployeeDocument::class);
-    }
-
     public function placement()
     {
         return $this->belongsTo(Placement::class);
