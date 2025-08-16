@@ -6,6 +6,8 @@
     RewriteEngine On
 
     # Handle Authorization Header
+    # This is crucial for APIs using JWT or other token-based auth.
+    # It passes the Authorization header to PHP, which some servers strip by default.
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
@@ -14,7 +16,9 @@
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
-    # Send Requests To Front Controller...
+    # Handle Front Controller...
+    # If the requested file or directory doesn't exist,
+    # redirect all requests to index.php.
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
