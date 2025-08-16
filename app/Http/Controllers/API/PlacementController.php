@@ -88,7 +88,7 @@ class PlacementController extends Controller
      */
     public function show(string $id): JsonResponse
     {
-        $placement = Placement::with(['client', 'createdBy', 'updatedBy', 'contractClients'])->find($id);
+        $placement = Placement::with(['client', 'createdBy', 'updatedBy', 'contractClients'])->where('uuid', $id)->first();
 
         if (!$placement) {
             return response()->json([
@@ -108,7 +108,7 @@ class PlacementController extends Controller
      */
     public function update(Request $request, string $id): JsonResponse
     {
-        $placement = Placement::find($id);
+        $placement = Placement::where('uuid', $id)->first();
 
         if (!$placement) {
             return response()->json([
@@ -150,7 +150,7 @@ class PlacementController extends Controller
      */
     public function destroy(string $id): JsonResponse
     {
-        $placement = Placement::find($id);
+        $placement = Placement::where('uuid', $id)->first();
 
         if (!$placement) {
             return response()->json([
@@ -167,4 +167,4 @@ class PlacementController extends Controller
             'message' => 'Placement deleted successfully'
         ]);
     }
-} 
+}

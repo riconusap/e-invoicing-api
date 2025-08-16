@@ -102,7 +102,7 @@ class ClientController extends Controller
      */
     public function show(string $id): JsonResponse
     {
-        $client = Client::with(['createdBy', 'updatedBy', 'placements'])->find($id);
+        $client = Client::with(['createdBy', 'updatedBy', 'placements'])->where('uuid', $id)->first();
 
         if (!$client) {
             return response()->json([
@@ -122,7 +122,7 @@ class ClientController extends Controller
      */
     public function update(Request $request, string $id): JsonResponse
     {
-        $client = Client::find($id);
+        $client = Client::where('uuid', $id)->first();
 
         if (!$client) {
             return response()->json([
@@ -186,7 +186,7 @@ class ClientController extends Controller
      */
     public function destroy(string $id): JsonResponse
     {
-        $client = Client::find($id);
+        $client = Client::where('uuid', $id)->first();
 
         if (!$client) {
             return response()->json([
