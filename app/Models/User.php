@@ -21,8 +21,7 @@ class User extends Authenticatable implements JWTSubject // <-- Implementasikan 
      */
     protected $fillable = [
         'uuid',
-        'name', // <-- Tambahkan 'name' sesuai migrasi
-        'nik',
+        'name',
         'username',
         'email',
         'password',
@@ -37,6 +36,8 @@ class User extends Authenticatable implements JWTSubject // <-- Implementasikan 
     protected $hidden = [
         'password',
         'remember_token',
+        'id',
+        'verification_at'
     ];
 
     /**
@@ -46,6 +47,7 @@ class User extends Authenticatable implements JWTSubject // <-- Implementasikan 
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'created_at' => 'datetime',
         'password' => 'hashed',
     ];
 
@@ -80,5 +82,13 @@ class User extends Authenticatable implements JWTSubject // <-- Implementasikan 
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new ResetPasswordNotification($token));
+    }
+
+    /**
+     * Get the employee record associated with the user.
+     */
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
     }
 }

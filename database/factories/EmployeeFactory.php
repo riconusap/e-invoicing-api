@@ -17,9 +17,10 @@ class EmployeeFactory extends Factory
     public function definition(): array
     {
         return [
-            'uuid' => fake()->uuid(),
-            'full_name' => fake()->name(),
-            'nik' => fake()->unique()->numerify('##########'),
+            'uuid' => $this->faker->uuid(),
+            'full_name' => $this->faker->name(),
+            'nik' => $this->faker->unique()->numerify('################'),
+            'nip' => $this->faker->unique()->numerify('##################'),
             'created_by' => 1, // Assuming user ID 1 exists
             'updated_by' => 1,
         ];

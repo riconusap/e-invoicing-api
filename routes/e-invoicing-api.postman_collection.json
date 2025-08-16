@@ -221,9 +221,6 @@
 			"item": [
 				{
 					"name": "Get All Employees",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -237,7 +234,6 @@
 						},
 						"method": "GET",
 						"header": [],
-						"body": {},
 						"url": {
 							"raw": "{{baseUrl}}/employees",
 							"host": [
@@ -267,7 +263,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"first_name\": \"John\",\n    \"last_name\": \"Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"phone\": \"1234567890\"\n}",
+							"raw": "{\n    \"full_name\": \"John Doe\",\n    \"nik\": \"1234567890123456\",\n    \"nip\": \"123456789012345678\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -331,7 +327,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"first_name\": \"John\",\n    \"last_name\": \"Doe\",\n    \"email\": \"john.doe.new@example.com\",\n    \"phone\": \"0987654321\"\n}",
+							"raw": "{\n    \"full_name\": \"John Doe Updated\",\n    \"nik\": \"1234567890123456\",\n    \"nip\": \"123456789012345678\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -373,6 +369,1055 @@
 							],
 							"path": [
 								"employees",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Clients",
+			"description": "CRUD operations for Clients",
+			"item": [
+				{
+					"name": "Get All Clients",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/clients",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"clients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Client",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "PT Maju Bersama",
+									"type": "text"
+								},
+								{
+									"key": "logo",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "address",
+									"value": "Jl. Sudirman No. 123, Jakarta Pusat",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "021-555-0123",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "info@majubersama.com",
+									"type": "text"
+								},
+								{
+									"key": "pic_name",
+									"value": "Budi Santoso",
+									"type": "text"
+								},
+								{
+									"key": "pic_phone",
+									"value": "0812-3456-7890",
+									"type": "text"
+								},
+								{
+									"key": "pic_email",
+									"value": "budi@majubersama.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/clients",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"clients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Client",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/clients/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"clients",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Client",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "_method",
+									"value": "PUT",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "PT Maju Bersama Updated",
+									"type": "text"
+								},
+								{
+									"key": "logo",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "address",
+									"value": "Jl. Sudirman No. 123, Jakarta Pusat",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "021-555-0123",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "info@majubersama.com",
+									"type": "text"
+								},
+								{
+									"key": "pic_name",
+									"value": "Budi Santoso",
+									"type": "text"
+								},
+								{
+									"key": "pic_phone",
+									"value": "0812-3456-7890",
+									"type": "text"
+								},
+								{
+									"key": "pic_email",
+									"value": "budi@majubersama.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/clients/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"clients",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Client",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/clients/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"clients",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Placements",
+			"description": "CRUD operations for Placements",
+			"item": [
+				{
+					"name": "Get All Placements",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/placements",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"placements"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Placement",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Web Development Project\",\n    \"description\": \"Custom web application development for client\",\n    \"client_id\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/placements",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"placements"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Placement",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/placements/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"placements",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Placement",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Web Development Project Updated\",\n    \"description\": \"Custom web application development for client\",\n    \"client_id\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/placements/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"placements",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Placement",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/placements/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"placements",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Contract Clients",
+			"description": "CRUD operations for Contract Clients",
+			"item": [
+				{
+					"name": "Get All Contract Clients",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/contract-clients",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"contract-clients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Contract Client",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"placement_id\": 1,\n    \"contract_value\": 50000000,\n    \"start_on\": \"2024-01-01\",\n    \"ends_on\": \"2024-06-30\",\n    \"project_type\": \"Development\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/contract-clients",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"contract-clients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Contract Client",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/contract-clients/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"contract-clients",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Contract Client",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"placement_id\": 1,\n    \"contract_value\": 60000000,\n    \"start_on\": \"2024-01-01\",\n    \"ends_on\": \"2024-06-30\",\n    \"project_type\": \"Development\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/contract-clients/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"contract-clients",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Contract Client",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/contract-clients/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"contract-clients",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Contract Employees",
+			"description": "CRUD operations for Contract Employees",
+			"item": [
+				{
+					"name": "Get All Contract Employees",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/contract-employees",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"contract-employees"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Contract Employee",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nip\": \"123456789012345678\",\n    \"start_on\": \"2024-01-01\",\n    \"ends_on\": \"2024-06-30\",\n    \"thp\": 8000000,\n    \"daily_wages\": 400000,\n    \"account_number\": \"1234567890\",\n    \"bank_id\": \"BCA\",\n    \"account_holder_name\": \"John Doe\",\n    \"no_bpjstk\": \"BPJSTK001\",\n    \"no_bpjskes\": \"BPJSKES001\",\n    \"employee_id\": 1,\n    \"placement_id\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/contract-employees",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"contract-employees"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Contract Employee",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/contract-employees/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"contract-employees",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Contract Employee",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nip\": \"123456789012345678\",\n    \"start_on\": \"2024-01-01\",\n    \"ends_on\": \"2024-06-30\",\n    \"thp\": 9000000,\n    \"daily_wages\": 450000,\n    \"account_number\": \"1234567890\",\n    \"bank_id\": \"BCA\",\n    \"account_holder_name\": \"John Doe\",\n    \"no_bpjstk\": \"BPJSTK001\",\n    \"no_bpjskes\": \"BPJSKES001\",\n    \"employee_id\": 1,\n    \"placement_id\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/contract-employees/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"contract-employees",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Contract Employee",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/contract-employees/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"contract-employees",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Invoices",
+			"description": "CRUD operations for Invoices",
+			"item": [
+				{
+					"name": "Get All Invoices",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/invoices",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"invoices"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Invoice",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"invoice_number\": \"INV-2024-001\",\n    \"invoice_date\": \"2024-01-15\",\n    \"due_date\": \"2024-01-30\",\n    \"subtotal\": 25000000,\n    \"tax\": 2500000,\n    \"total\": 27500000,\n    \"status\": \"pending\",\n    \"notes\": \"First milestone payment\",\n    \"contract_client_id\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/invoices",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"invoices"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Invoice",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/invoices/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"invoices",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Invoice",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"invoice_number\": \"INV-2024-001\",\n    \"invoice_date\": \"2024-01-15\",\n    \"due_date\": \"2024-01-30\",\n    \"subtotal\": 25000000,\n    \"tax\": 2500000,\n    \"total\": 27500000,\n    \"status\": \"paid\",\n    \"notes\": \"First milestone payment - Updated\",\n    \"contract_client_id\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/invoices/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"invoices",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Invoice",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/invoices/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"invoices",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PIC Externals",
+			"description": "CRUD operations for PIC Externals",
+			"item": [
+				{
+					"name": "Get All PIC Externals",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/pic-externals",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pic-externals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create PIC External",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Sarah Wilson\",\n    \"position\": \"Project Manager\",\n    \"phone\": \"0815-6789-0123\",\n    \"email\": \"sarah.wilson@external.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/pic-externals",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pic-externals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get PIC External",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/pic-externals/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pic-externals",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update PIC External",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Sarah Wilson Updated\",\n    \"position\": \"Senior Project Manager\",\n    \"phone\": \"0815-6789-0123\",\n    \"email\": \"sarah.wilson@external.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/pic-externals/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pic-externals",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete PIC External",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/pic-externals/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pic-externals",
 								"1"
 							]
 						}

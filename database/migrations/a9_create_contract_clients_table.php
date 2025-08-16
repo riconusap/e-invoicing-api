@@ -4,21 +4,23 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStampInfosTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('stamp_infos', function (Blueprint $table) {
+        Schema::create('contract_clients', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
-            $table->foreignId('contract_client_id')->constrained('contract_clients')->onDelete('cascade');
-            $table->string('name');
-            $table->string('position');
+            $table->foreignId('placement_id')->constrained('placements')->onDelete('cascade');
+            $table->integer('contract_value');
+            $table->date('start_on');
+            $table->date('ends_on');
+            $table->string('project_type');
             $table->foreignId('created_by')->nullable()->constrained('users');
             $table->foreignId('updated_by')->nullable()->constrained('users');
             $table->foreignId('deleted_by')->nullable()->constrained('users');
@@ -32,8 +34,8 @@ class CreateStampInfosTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
-        Schema::dropIfExists('stamp_infos');
+        Schema::dropIfExists('contract_clients');
     }
-}
+};

@@ -4,22 +4,21 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBastsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('basts', function (Blueprint $table) {
+        Schema::create('employee_documents', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
-            $table->foreignId('contract_client_id')->constrained('contract_clients')->onDelete('cascade');
-            $table->foreignId('stamp_info_id')->constrained('stamp_infos')->onDelete('cascade');
-            $table->json('document_attachments')->nullable(); // Kolom ini di ERD, tapi ada tabel terpisah. Mungkin ini ringkasan.
-            $table->timestamp('timestamp');
+            $table->string('file');
+            $table->string('filename');
+            $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade');
             $table->foreignId('created_by')->nullable()->constrained('users');
             $table->foreignId('updated_by')->nullable()->constrained('users');
             $table->foreignId('deleted_by')->nullable()->constrained('users');
@@ -33,8 +32,8 @@ class CreateBastsTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
-        Schema::dropIfExists('basts');
+        Schema::dropIfExists('employee_documents');
     }
-}
+};

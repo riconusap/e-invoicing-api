@@ -98,6 +98,7 @@ class InvoiceController extends Controller
      */
     public function destroy(Invoice $invoice)
     {
+        $invoice->update(['deleted_by' => auth()->id()]);
         $invoice->delete();
         return response()->json(null, 204);
     }

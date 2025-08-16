@@ -8,21 +8,25 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     *
+     * @return void
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('set null');
+        Schema::table('clients', function (Blueprint $table) {
+            $table->string('logo')->nullable()->after('name');
         });
     }
 
     /**
      * Reverse the migrations.
+     *
+     * @return void
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign(['employee_id']);
+        Schema::table('clients', function (Blueprint $table) {
+            $table->dropColumn('logo');
         });
     }
 };

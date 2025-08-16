@@ -5,16 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Storage;
 
-class Employee extends Model
+class Client extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $table = 'clients';
+
     protected $fillable = [
         'uuid',
-        'full_name',
-        'nik',
-        'nip',
+        'name',
+        'logo',
+        'address',
+        'phone',
+        'email',
+        'pic_name',
+        'pic_phone',
+        'pic_email',
         'created_by',
         'updated_by',
         'deleted_by'
@@ -24,12 +32,9 @@ class Employee extends Model
         'id',
     ];
 
-    // Relationships
-    public function user()
-    {
-        return $this->hasOne(User::class);
-    }
+    protected $appends = ['logo_url'];
 
+    // Relationships
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');
@@ -45,18 +50,17 @@ class Employee extends Model
         return $this->belongsTo(User::class, 'deleted_by');
     }
 
-    public function employeeDocuments()
-    {
-        return $this->hasMany(EmployeeDocument::class);
-    }
-
-    public function contractEmployees()
-    {
-        return $this->hasMany(ContractEmployee::class);
-    }
-
     public function placements()
     {
-        return $this->hasMany(Placement::class, 'pic_internal_id');
+        return $this->hasMany(Placement::class);
+    }
+
+    // Accessor for logo URL
+    public function getLogoUrlAttribute()
+    {
+        if ($this->logo) {
+            return asset('storage/' . $this->logo);
+        }
+        return null;
     }
 }
