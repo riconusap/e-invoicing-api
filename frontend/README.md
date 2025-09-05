@@ -93,6 +93,16 @@ frontend/
    - Frontend: http://localhost:5173 (or available port)
    - Ensure backend is running on http://localhost:8000
 
+### ⚠️ Important Notes
+
+**Tailwind CSS v4 Configuration:**
+This project uses Tailwind CSS v4 with the new PostCSS plugin. The configuration has been updated to:
+- Use `@tailwindcss/postcss` plugin instead of the old `tailwindcss` plugin
+- Import Tailwind using `@import "tailwindcss"` syntax in CSS files
+- Simplified `tailwind.config.js` for v4 compatibility
+
+If you encounter PostCSS errors, ensure you have the latest configuration files.
+
 ### Available Scripts
 
 ```bash
