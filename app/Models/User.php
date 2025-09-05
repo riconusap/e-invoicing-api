@@ -165,6 +165,29 @@ class User extends Authenticatable implements JWTSubject // <-- Implementasikan 
             'ip_address' => $ip ?? request()->ip(),
             'user_agent' => $userAgent ?? request()->userAgent(),
             'last_activity' => now(),
+            'is_active' => true,
         ]);
+    }
+
+    /**
+     * Clean up expired sessions
+     */
+    public function cleanExpiredSessions()
+    {
+        $this->sessions()->where('is_active', true)->get()->each(function ($session) {
+            try {
+                // Try to decode the token to check if it's expired
+                $token = $session->token;
+                $payload = \Tymon\JWTAuth\Facades\JWTAuth::setToken($token)->getPayload();
+
+                // If we get here, token is valid, so we don't deactivate it
+            } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+                // Token is expired, deactivate the session
+                $session->update(['is_active' => false]);
+            } catch (\Exception $e) {
+                // Any other JWT error, deactivate the session
+                $session->update(['is_active' => false]);
+            }
+        });
     }
 }

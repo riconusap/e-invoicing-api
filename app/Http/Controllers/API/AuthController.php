@@ -42,6 +42,9 @@ class AuthController extends Controller
 
         $user = auth('api')->user();
 
+        // Clean up expired sessions first
+        $user->cleanExpiredSessions();
+
         // Check if user already has active sessions
         if ($user->hasActiveSessions()) {
             auth('api')->logout(); // Logout the current attempt
@@ -157,10 +160,14 @@ class AuthController extends Controller
                 'uuid' => $user->uuid,
                 'name' => $user->name,
                 'email' => $user->email,
+                'last_login_at_human' => $user->last_login_at ? $user->last_login_at->diffForHumans() : null,
                 'last_login_at' => $user->last_login_at,
                 'last_login_ip' => $user->last_login_ip,
                 'current_ip' => request()->ip(),
-                'login_duration' => $user->last_login_at ? now()->diffInMinutes($user->last_login_at) : null,
+                // Calculate login duration in minutes (positive value)
+                'login_duration' => $user->last_login_at
+                    ? abs(now()->diffInMinutes($user->last_login_at, false))
+                    : null,
                 'active_sessions_count' => $user->getActiveSessionsCount(),
             ]
         ]);
