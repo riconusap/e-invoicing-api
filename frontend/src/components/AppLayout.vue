@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '../stores/auth'
 import {
   Bars3Icon,
   XMarkIcon,
@@ -13,6 +14,7 @@ import {
 } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
+const authStore = useAuthStore()
 const sidebarOpen = ref(false)
 
 const navigation = [
@@ -23,9 +25,8 @@ const navigation = [
   { name: 'Invoices', href: '/invoices', icon: DocumentTextIcon, current: false },
 ]
 
-const logout = () => {
-  localStorage.removeItem('auth_token')
-  localStorage.removeItem('user')
+const logout = async () => {
+  await authStore.logout()
   router.push('/login')
 }
 </script>
@@ -141,7 +142,7 @@ const logout = () => {
           <div class="ml-4 flex items-center md:ml-6">
             <!-- Profile dropdown could go here -->
             <div class="text-sm text-gray-700">
-              Welcome back!
+              Welcome back, {{ authStore.userName || 'User' }}!
             </div>
           </div>
         </div>

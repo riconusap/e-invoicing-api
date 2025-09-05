@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import { useAuthStore } from '../stores/auth'
 import Dashboard from '../views/Dashboard.vue'
 import LoginView from '../views/LoginView.vue'
 import EmployeesView from '../views/EmployeesView.vue'
@@ -51,18 +52,22 @@ const router = createRouter({
 })
 
 // Navigation guards
-router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('auth_token')
-  const isAuthenticated = !!token
+router.beforeEach(async (to, from, next) => {
+  const authStore = useAuthStore()
+  
+  // Initialize auth state if not already done
+  if (!authStore.user && authStore.token) {
+    authStore.initializeAuth()
+  }
 
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (!isAuthenticated) {
+    if (!authStore.isAuthenticated) {
       next('/login')
     } else {
       next()
     }
   } else if (to.matched.some(record => record.meta.requiresGuest)) {
-    if (isAuthenticated) {
+    if (authStore.isAuthenticated) {
       next('/')
     } else {
       next()

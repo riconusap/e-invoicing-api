@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { resourceAPI } from '../services/api'
+import { computed, onMounted } from 'vue'
+import { useEmployeesStore, useClientsStore, usePlacementsStore, useInvoicesStore } from '../stores'
 import {
   UsersIcon,
   BuildingOfficeIcon,
@@ -8,33 +8,52 @@ import {
   DocumentTextIcon,
 } from '@heroicons/vue/24/outline'
 
-const stats = ref([
-  { name: 'Total Employees', value: '0', icon: UsersIcon, color: 'bg-blue-500' },
-  { name: 'Total Clients', value: '0', icon: BuildingOfficeIcon, color: 'bg-green-500' },
-  { name: 'Active Placements', value: '0', icon: MapPinIcon, color: 'bg-yellow-500' },
-  { name: 'Total Invoices', value: '0', icon: DocumentTextIcon, color: 'bg-purple-500' },
+const employeesStore = useEmployeesStore()
+const clientsStore = useClientsStore()
+const placementsStore = usePlacementsStore()
+const invoicesStore = useInvoicesStore()
+
+const stats = computed(() => [
+  { 
+    name: 'Total Employees', 
+    value: employeesStore.employeesCount.toString(), 
+    icon: UsersIcon, 
+    color: 'bg-blue-500' 
+  },
+  { 
+    name: 'Total Clients', 
+    value: clientsStore.clientsCount.toString(), 
+    icon: BuildingOfficeIcon, 
+    color: 'bg-green-500' 
+  },
+  { 
+    name: 'Active Placements', 
+    value: placementsStore.activePlacementsCount.toString(), 
+    icon: MapPinIcon, 
+    color: 'bg-yellow-500' 
+  },
+  { 
+    name: 'Total Invoices', 
+    value: invoicesStore.invoicesCount.toString(), 
+    icon: DocumentTextIcon, 
+    color: 'bg-purple-500' 
+  },
 ])
 
-const loading = ref(true)
+const loading = computed(() => 
+  employeesStore.loading || 
+  clientsStore.loading || 
+  placementsStore.loading || 
+  invoicesStore.loading
+)
 
 const loadDashboardData = async () => {
-  try {
-    const [employees, clients, placements, invoices] = await Promise.all([
-      resourceAPI.getEmployees(),
-      resourceAPI.getClients(),
-      resourceAPI.getPlacements(),
-      resourceAPI.getInvoices(),
-    ])
-
-    stats.value[0].value = employees.data.data?.length?.toString() || '0'
-    stats.value[1].value = clients.data.data?.length?.toString() || '0'
-    stats.value[2].value = placements.data.data?.length?.toString() || '0'
-    stats.value[3].value = invoices.data.data?.length?.toString() || '0'
-  } catch (error) {
-    console.error('Error loading dashboard data:', error)
-  } finally {
-    loading.value = false
-  }
+  await Promise.all([
+    employeesStore.fetchEmployees(),
+    clientsStore.fetchClients(),
+    placementsStore.fetchPlacements(),
+    invoicesStore.fetchInvoices(),
+  ])
 }
 
 onMounted(() => {
