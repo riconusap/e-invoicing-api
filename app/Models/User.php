@@ -96,6 +96,22 @@ class User extends Authenticatable implements JWTSubject // <-- Implementasikan 
     }
 
     /**
+     * Get the user sessions.
+     */
+    public function sessions()
+    {
+        return $this->hasMany(UserSession::class);
+    }
+
+    /**
+     * Get active user sessions.
+     */
+    public function activeSessions()
+    {
+        return $this->hasMany(UserSession::class)->active();
+    }
+
+    /**
      * Check if user is currently logged in (has valid token)
      */
     public function isLoggedIn()
@@ -111,6 +127,44 @@ class User extends Authenticatable implements JWTSubject // <-- Implementasikan 
         $this->update([
             'last_login_at' => now(),
             'last_login_ip' => $ip ?? request()->ip(),
+        ]);
+    }
+
+    /**
+     * Check if user has active sessions
+     */
+    public function hasActiveSessions()
+    {
+        return $this->activeSessions()->exists();
+    }
+
+    /**
+     * Get active sessions count
+     */
+    public function getActiveSessionsCount()
+    {
+        return $this->activeSessions()->count();
+    }
+
+    /**
+     * Logout from all devices
+     */
+    public function logoutFromAllDevices()
+    {
+        $this->activeSessions()->update(['is_active' => false]);
+    }
+
+    /**
+     * Create a new session
+     */
+    public function createSession($token, $ip = null, $userAgent = null)
+    {
+        return $this->sessions()->create([
+            'token' => $token,
+            'token_hash' => hash('sha256', $token),
+            'ip_address' => $ip ?? request()->ip(),
+            'user_agent' => $userAgent ?? request()->userAgent(),
+            'last_activity' => now(),
         ]);
     }
 }

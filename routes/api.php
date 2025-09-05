@@ -20,6 +20,8 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::get('/me', [AuthController::class, 'me']);
     Route::get('/is-logged-in', [AuthController::class, 'isLoggedIn']);
     Route::get('/login-info', [AuthController::class, 'loginInfo']);
+    Route::post('/logout-all-devices', [AuthController::class, 'logoutFromAllDevices']);
+    Route::get('/active-sessions', [AuthController::class, 'getActiveSessions']);
 });
 
 // Protected API Resources

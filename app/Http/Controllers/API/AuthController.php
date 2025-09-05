@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
+use App\Models\UserSession;
 use Illuminate\Support\Str;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Password;
@@ -39,9 +40,27 @@ class AuthController extends Controller
             return response()->json(['error' => 'Wrong Email or Password'], 401);
         }
 
-        // Update last login information
         $user = auth('api')->user();
+
+        // Check if user already has active sessions
+        if ($user->hasActiveSessions()) {
+            auth('api')->logout(); // Logout the current attempt
+
+            return response()->json([
+                'success' => false,
+                'message' => 'User is already logged in on another device',
+                'error' => 'ALREADY_LOGGED_IN',
+                'active_sessions' => $user->getActiveSessionsCount(),
+                'last_login_at' => $user->last_login_at,
+                'last_login_ip' => $user->last_login_ip,
+            ], 409); // 409 Conflict
+        }
+
+        // Update last login information
         $user->updateLastLogin($request->ip());
+
+        // Create new session
+        $user->createSession($token, $request->ip(), $request->userAgent());
 
         return $this->createNewToken($token);
     }
@@ -75,6 +94,17 @@ class AuthController extends Controller
 
     public function logout()
     {
+        $user = auth('api')->user();
+
+        if ($user) {
+            // Deactivate current session using token hash
+            $token = JWTAuth::getToken();
+            if ($token) {
+                $tokenHash = hash('sha256', $token);
+                UserSession::where('token_hash', $tokenHash)->update(['is_active' => false]);
+            }
+        }
+
         auth('api')->logout();
         return response()->json(['message' => 'User successfully signed out']);
     }
@@ -131,6 +161,60 @@ class AuthController extends Controller
                 'last_login_ip' => $user->last_login_ip,
                 'current_ip' => request()->ip(),
                 'login_duration' => $user->last_login_at ? now()->diffInMinutes($user->last_login_at) : null,
+                'active_sessions_count' => $user->getActiveSessionsCount(),
+            ]
+        ]);
+    }
+
+    public function logoutFromAllDevices()
+    {
+        $user = auth('api')->user();
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not authenticated'
+            ], 401);
+        }
+
+        // Logout from all devices
+        $user->logoutFromAllDevices();
+
+        // Also logout current session
+        auth('api')->logout();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Successfully logged out from all devices'
+        ]);
+    }
+
+    public function getActiveSessions()
+    {
+        $user = auth('api')->user();
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not authenticated'
+            ], 401);
+        }
+
+        $sessions = $user->activeSessions()->get()->map(function ($session) {
+            return [
+                'uuid' => $session->uuid,
+                'ip_address' => $session->ip_address,
+                'user_agent' => $session->user_agent,
+                'last_activity' => $session->last_activity,
+                'created_at' => $session->created_at,
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'sessions' => $sessions,
+                'total_active_sessions' => $sessions->count(),
             ]
         ]);
     }

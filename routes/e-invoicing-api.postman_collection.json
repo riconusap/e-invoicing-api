@@ -150,6 +150,62 @@
 					"response": []
 				},
 				{
+					"name": "Logout from All Devices",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/auth/logout-all-devices",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"logout-all-devices"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Active Sessions",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/auth/active-sessions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"active-sessions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Logout",
 					"request": {
 						"auth": {
