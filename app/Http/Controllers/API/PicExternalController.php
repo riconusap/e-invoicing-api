@@ -89,9 +89,9 @@ class PicExternalController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id): JsonResponse
+    public function show(string $uuid): JsonResponse
     {
-        $picExternal = PicExternal::with(['createdBy', 'updatedBy'])->find($id);
+        $picExternal = PicExternal::with(['createdBy', 'updatedBy'])->where('uuid', $uuid)->first();
 
         if (!$picExternal) {
             return response()->json([
@@ -109,9 +109,9 @@ class PicExternalController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id): JsonResponse
+    public function update(Request $request, string $uuid): JsonResponse
     {
-        $picExternal = PicExternal::find($id);
+        $picExternal = PicExternal::where('uuid', $uuid)->first();
 
         if (!$picExternal) {
             return response()->json([
@@ -124,7 +124,7 @@ class PicExternalController extends Controller
             'name' => 'sometimes|required|string|max:255',
             'position' => 'sometimes|required|string|max:255',
             'phone' => 'sometimes|required|string|max:20',
-            'email' => 'sometimes|required|email|unique:pic_externals,email,' . $id,
+            'email' => 'sometimes|required|email|unique:pic_externals,email,' . $uuid,
         ]);
 
         if ($validator->fails()) {
@@ -153,9 +153,9 @@ class PicExternalController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id): JsonResponse
+    public function destroy(string $uuid): JsonResponse
     {
-        $picExternal = PicExternal::find($id);
+        $picExternal = PicExternal::where('uuid', $uuid)->first();
 
         if (!$picExternal) {
             return response()->json([

@@ -26,6 +26,8 @@ class User extends Authenticatable implements JWTSubject // <-- Implementasikan 
         'email',
         'password',
         'employee_id',
+        'last_login_at',
+        'last_login_ip',
     ];
 
     /**
@@ -48,6 +50,7 @@ class User extends Authenticatable implements JWTSubject // <-- Implementasikan 
     protected $casts = [
         'email_verified_at' => 'datetime',
         'created_at' => 'datetime',
+        'last_login_at' => 'datetime',
         'password' => 'hashed',
     ];
 
@@ -90,5 +93,24 @@ class User extends Authenticatable implements JWTSubject // <-- Implementasikan 
     public function employee()
     {
         return $this->belongsTo(Employee::class);
+    }
+
+    /**
+     * Check if user is currently logged in (has valid token)
+     */
+    public function isLoggedIn()
+    {
+        return auth('api')->check() && auth('api')->user()->id === $this->id;
+    }
+
+    /**
+     * Update last login information
+     */
+    public function updateLastLogin($ip = null)
+    {
+        $this->update([
+            'last_login_at' => now(),
+            'last_login_ip' => $ip ?? request()->ip(),
+        ]);
     }
 }

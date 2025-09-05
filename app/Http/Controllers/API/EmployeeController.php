@@ -17,7 +17,7 @@ class EmployeeController extends Controller
     public function index()
     {
         try {
-            $employees = Employee::with(['createdBy', 'updatedBy'])
+            $employees = Employee::with(['createdBy', 'updatedBy', 'contractEmployees'])
                 ->orderBy('created_at', 'desc')
                 ->paginate(10);
 

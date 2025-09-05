@@ -20,7 +20,7 @@ class AuthController extends Controller
     public function __construct()
     {
         // Middleware 'auth:api' akan melindungi method kecuali 'login' dan 'register'
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'isLoggedIn']]);
     }
 
     public function login(Request $request)
@@ -36,8 +36,12 @@ class AuthController extends Controller
 
         $credentials = $request->only('email', 'password');
         if (! $token = auth('api')->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'Wrong Email or Password'], 401);
         }
+
+        // Update last login information
+        $user = auth('api')->user();
+        $user->updateLastLogin($request->ip());
 
         return $this->createNewToken($token);
     }
@@ -78,6 +82,57 @@ class AuthController extends Controller
     public function me()
     {
         return response()->json(auth('api')->user());
+    }
+
+    public function isLoggedIn()
+    {
+        $user = auth('api')->user();
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not authenticated',
+                'is_logged_in' => false
+            ], 401);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'User is logged in',
+            'is_logged_in' => true,
+            'user' => [
+                'uuid' => $user->uuid,
+                'name' => $user->name,
+                'email' => $user->email,
+                'last_login_at' => $user->last_login_at,
+                'last_login_ip' => $user->last_login_ip,
+            ]
+        ]);
+    }
+
+    public function loginInfo()
+    {
+        $user = auth('api')->user();
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not authenticated'
+            ], 401);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'uuid' => $user->uuid,
+                'name' => $user->name,
+                'email' => $user->email,
+                'last_login_at' => $user->last_login_at,
+                'last_login_ip' => $user->last_login_ip,
+                'current_ip' => request()->ip(),
+                'login_duration' => $user->last_login_at ? now()->diffInMinutes($user->last_login_at) : null,
+            ]
+        ]);
     }
 
     public function refresh()

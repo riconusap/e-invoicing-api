@@ -100,9 +100,9 @@ class ClientController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id): JsonResponse
+    public function show(string $uuid): JsonResponse
     {
-        $client = Client::with(['createdBy', 'updatedBy', 'placements'])->where('uuid', $id)->first();
+        $client = Client::with(['createdBy', 'updatedBy', 'placements'])->where('uuid', $uuid)->first();
 
         if (!$client) {
             return response()->json([
@@ -120,9 +120,9 @@ class ClientController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id): JsonResponse
+    public function update(Request $request, string $uuid): JsonResponse
     {
-        $client = Client::where('uuid', $id)->first();
+        $client = Client::where('uuid', $uuid)->first();
 
         if (!$client) {
             return response()->json([
@@ -136,7 +136,7 @@ class ClientController extends Controller
             'logo' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
             'address' => 'sometimes|required|string',
             'phone' => 'sometimes|required|string|max:20',
-            'email' => 'sometimes|required|email|unique:clients,email,' . $id,
+            'email' => 'sometimes|required|email|unique:clients,email,' . $uuid,
             'pic_name' => 'sometimes|required|string|max:255',
             'pic_phone' => 'sometimes|required|string|max:20',
             'pic_email' => 'sometimes|required|email',
@@ -184,9 +184,9 @@ class ClientController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id): JsonResponse
+    public function destroy(string $uuid): JsonResponse
     {
-        $client = Client::where('uuid', $id)->first();
+        $client = Client::where('uuid', $uuid)->first();
 
         if (!$client) {
             return response()->json([

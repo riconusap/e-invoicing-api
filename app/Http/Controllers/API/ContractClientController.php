@@ -94,9 +94,9 @@ class ContractClientController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id): JsonResponse
+    public function show(string $uuid): JsonResponse
     {
-        $contract = ContractClient::with(['placement.client', 'createdBy', 'updatedBy', 'invoices'])->find($id);
+        $contract = ContractClient::with(['placement.client', 'createdBy', 'updatedBy', 'invoices'])->where('uuid', $uuid)->first();
 
         if (!$contract) {
             return response()->json([
@@ -114,9 +114,9 @@ class ContractClientController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id): JsonResponse
+    public function update(Request $request, string $uuid): JsonResponse
     {
-        $contract = ContractClient::find($id);
+        $contract = ContractClient::where('uuid', $uuid)->first();
 
         if (!$contract) {
             return response()->json([
@@ -160,9 +160,9 @@ class ContractClientController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id): JsonResponse
+    public function destroy(string $uuid): JsonResponse
     {
-        $contract = ContractClient::find($id);
+        $contract = ContractClient::where('uuid', $uuid)->first();
 
         if (!$contract) {
             return response()->json([
@@ -179,4 +179,4 @@ class ContractClientController extends Controller
             'message' => 'Contract deleted successfully'
         ]);
     }
-} 
+}

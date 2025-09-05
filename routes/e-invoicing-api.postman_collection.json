@@ -55,7 +55,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"password\"\n}",
+							"raw": "{\n    \"email\": \"rikonusapratama@gmail.com\",\n    \"password\": \"password\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -98,6 +98,52 @@
 							"path": [
 								"auth",
 								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Is Logged In",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/auth/is-logged-in",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"is-logged-in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login Info",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/auth/login-info",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login-info"
 							]
 						}
 					},
@@ -166,7 +212,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"test@example.com\"\n}",
+							"raw": "{\n    \"email\": \"rikonusapratama@gmail.com\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -193,7 +239,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"token\": \"your-reset-token\",\n    \"email\": \"test@example.com\",\n    \"password\": \"new-password\",\n    \"password_confirmation\": \"new-password\"\n}",
+							"raw": "{\n    \"token\": \"your-reset-token\",\n    \"email\": \"rikonusapratama@gmail.com\",\n    \"password\": \"new-password\",\n    \"password_confirmation\": \"new-password\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -298,7 +344,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/employees/1",
+							"raw": "{{baseUrl}}/employees/{{employee_uuid}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -335,7 +381,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/employees/1",
+							"raw": "{{baseUrl}}/employees/{{employee_uuid}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -363,7 +409,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/employees/1",
+							"raw": "{{baseUrl}}/employees/{{employee_uuid}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -496,7 +542,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/clients/1",
+							"raw": "{{baseUrl}}/clients/{{client_uuid}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -574,7 +620,7 @@
 							]
 						},
 						"url": {
-							"raw": "{{baseUrl}}/clients/1",
+							"raw": "{{baseUrl}}/clients/{{client_uuid}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -602,7 +648,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/clients/1",
+							"raw": "{{baseUrl}}/clients/{{client_uuid}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -664,7 +710,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Web Development Project\",\n    \"description\": \"Custom web application development for client\",\n    \"client_id\": 1\n}",
+							"raw": "{\n    \"name\": \"Web Development Project\",\n    \"description\": \"Custom web application development for client\",\n    \"client_id\": \"{{client_uuid}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -699,7 +745,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/placements/1",
+							"raw": "{{baseUrl}}/placements/{{placement_uuid}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -728,7 +774,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Web Development Project Updated\",\n    \"description\": \"Custom web application development for client\",\n    \"client_id\": 1\n}",
+							"raw": "{\n    \"name\": \"Web Development Project Updated\",\n    \"description\": \"Custom web application development for client\",\n    \"client_id\": \"{{client_uuid}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -736,7 +782,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/placements/1",
+							"raw": "{{baseUrl}}/placements/{{placement_uuid}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -764,7 +810,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/placements/1",
+							"raw": "{{baseUrl}}/placements/{{placement_uuid}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -826,7 +872,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"placement_id\": 1,\n    \"contract_value\": 50000000,\n    \"start_on\": \"2024-01-01\",\n    \"ends_on\": \"2024-06-30\",\n    \"project_type\": \"Development\"\n}",
+							"raw": "{\n    \"placement_id\": \"{{placement_uuid}}\",\n    \"contract_value\": 50000000,\n    \"start_on\": \"2024-01-01\",\n    \"ends_on\": \"2024-06-30\",\n    \"project_type\": \"Development\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -861,7 +907,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/contract-clients/1",
+							"raw": "{{baseUrl}}/contract-clients/{{contract_client_uuid}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -890,7 +936,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"placement_id\": 1,\n    \"contract_value\": 60000000,\n    \"start_on\": \"2024-01-01\",\n    \"ends_on\": \"2024-06-30\",\n    \"project_type\": \"Development\"\n}",
+							"raw": "{\n    \"placement_id\": \"{{placement_uuid}}\",\n    \"contract_value\": 60000000,\n    \"start_on\": \"2024-01-01\",\n    \"ends_on\": \"2024-06-30\",\n    \"project_type\": \"Development\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -898,7 +944,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/contract-clients/1",
+							"raw": "{{baseUrl}}/contract-clients/{{contract_client_uuid}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -926,7 +972,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/contract-clients/1",
+							"raw": "{{baseUrl}}/contract-clients/{{contract_client_uuid}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -988,7 +1034,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nip\": \"123456789012345678\",\n    \"start_on\": \"2024-01-01\",\n    \"ends_on\": \"2024-06-30\",\n    \"thp\": 8000000,\n    \"daily_wages\": 400000,\n    \"account_number\": \"1234567890\",\n    \"bank_id\": \"BCA\",\n    \"account_holder_name\": \"John Doe\",\n    \"no_bpjstk\": \"BPJSTK001\",\n    \"no_bpjskes\": \"BPJSKES001\",\n    \"employee_id\": 1,\n    \"placement_id\": 1\n}",
+							"raw": "{\n    \"nip\": \"123456789012345678\",\n    \"start_on\": \"2024-01-01\",\n    \"ends_on\": \"2024-06-30\",\n    \"thp\": 8000000,\n    \"daily_wages\": 400000,\n    \"account_number\": \"1234567890\",\n    \"bank_id\": \"BCA\",\n    \"account_holder_name\": \"John Doe\",\n    \"no_bpjstk\": \"BPJSTK001\",\n    \"no_bpjskes\": \"BPJSKES001\",\n    \"employee_id\": \"{{employee_uuid}}\",\n    \"placement_id\": \"{{placement_uuid}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1023,7 +1069,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/contract-employees/1",
+							"raw": "{{baseUrl}}/contract-employees/{{contract_employee_uuid}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1052,7 +1098,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nip\": \"123456789012345678\",\n    \"start_on\": \"2024-01-01\",\n    \"ends_on\": \"2024-06-30\",\n    \"thp\": 9000000,\n    \"daily_wages\": 450000,\n    \"account_number\": \"1234567890\",\n    \"bank_id\": \"BCA\",\n    \"account_holder_name\": \"John Doe\",\n    \"no_bpjstk\": \"BPJSTK001\",\n    \"no_bpjskes\": \"BPJSKES001\",\n    \"employee_id\": 1,\n    \"placement_id\": 1\n}",
+							"raw": "{\n    \"nip\": \"123456789012345678\",\n    \"start_on\": \"2024-01-01\",\n    \"ends_on\": \"2024-06-30\",\n    \"thp\": 9000000,\n    \"daily_wages\": 450000,\n    \"account_number\": \"1234567890\",\n    \"bank_id\": \"BCA\",\n    \"account_holder_name\": \"John Doe\",\n    \"no_bpjstk\": \"BPJSTK001\",\n    \"no_bpjskes\": \"BPJSKES001\",\n    \"employee_id\": \"{{employee_uuid}}\",\n    \"placement_id\": \"{{placement_uuid}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1060,7 +1106,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/contract-employees/1",
+							"raw": "{{baseUrl}}/contract-employees/{{contract_employee_uuid}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1088,7 +1134,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/contract-employees/1",
+							"raw": "{{baseUrl}}/contract-employees/{{contract_employee_uuid}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1150,7 +1196,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"invoice_number\": \"INV-2024-001\",\n    \"invoice_date\": \"2024-01-15\",\n    \"due_date\": \"2024-01-30\",\n    \"subtotal\": 25000000,\n    \"tax\": 2500000,\n    \"total\": 27500000,\n    \"status\": \"pending\",\n    \"notes\": \"First milestone payment\",\n    \"contract_client_id\": 1\n}",
+							"raw": "{\n    \"invoice_number\": \"INV-2024-001\",\n    \"invoice_date\": \"2024-01-15\",\n    \"due_date\": \"2024-01-30\",\n    \"subtotal\": 25000000,\n    \"tax\": 2500000,\n    \"total\": 27500000,\n    \"status\": \"pending\",\n    \"notes\": \"First milestone payment\",\n    \"contract_client_id\": \"{{contract_client_uuid}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1185,7 +1231,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/invoices/1",
+							"raw": "{{baseUrl}}/invoices/{{invoice_uuid}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1214,7 +1260,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"invoice_number\": \"INV-2024-001\",\n    \"invoice_date\": \"2024-01-15\",\n    \"due_date\": \"2024-01-30\",\n    \"subtotal\": 25000000,\n    \"tax\": 2500000,\n    \"total\": 27500000,\n    \"status\": \"paid\",\n    \"notes\": \"First milestone payment - Updated\",\n    \"contract_client_id\": 1\n}",
+							"raw": "{\n    \"invoice_number\": \"INV-2024-001\",\n    \"invoice_date\": \"2024-01-15\",\n    \"due_date\": \"2024-01-30\",\n    \"subtotal\": 25000000,\n    \"tax\": 2500000,\n    \"total\": 27500000,\n    \"status\": \"paid\",\n    \"notes\": \"First milestone payment - Updated\",\n    \"contract_client_id\": \"{{contract_client_uuid}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1222,7 +1268,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/invoices/1",
+							"raw": "{{baseUrl}}/invoices/{{invoice_uuid}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1250,7 +1296,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/invoices/1",
+							"raw": "{{baseUrl}}/invoices/{{invoice_uuid}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1347,7 +1393,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/pic-externals/1",
+							"raw": "{{baseUrl}}/pic-externals/{{pic_external_uuid}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1384,7 +1430,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/pic-externals/1",
+							"raw": "{{baseUrl}}/pic-externals/{{pic_external_uuid}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1412,7 +1458,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/pic-externals/1",
+							"raw": "{{baseUrl}}/pic-externals/{{pic_external_uuid}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1439,6 +1485,41 @@
 		{
 			"key": "token",
 			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "employee_uuid",
+			"value": "550e8400-e29b-41d4-a716-446655440001",
+			"type": "string"
+		},
+		{
+			"key": "client_uuid",
+			"value": "550e8400-e29b-41d4-a716-446655440002",
+			"type": "string"
+		},
+		{
+			"key": "placement_uuid",
+			"value": "550e8400-e29b-41d4-a716-446655440003",
+			"type": "string"
+		},
+		{
+			"key": "contract_client_uuid",
+			"value": "550e8400-e29b-41d4-a716-446655440004",
+			"type": "string"
+		},
+		{
+			"key": "contract_employee_uuid",
+			"value": "550e8400-e29b-41d4-a716-446655440005",
+			"type": "string"
+		},
+		{
+			"key": "invoice_uuid",
+			"value": "550e8400-e29b-41d4-a716-446655440006",
+			"type": "string"
+		},
+		{
+			"key": "pic_external_uuid",
+			"value": "550e8400-e29b-41d4-a716-446655440007",
 			"type": "string"
 		}
 	]

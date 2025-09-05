@@ -112,15 +112,15 @@ class InvoiceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id): JsonResponse
+    public function show(string $uuid): JsonResponse
     {
         $invoice = Invoice::with([
-            'contractClient.placement.client', 
-            'createdBy', 
-            'updatedBy', 
+            'contractClient.placement.client',
+            'createdBy',
+            'updatedBy',
             'invoiceItems',
             'documentAttachments'
-        ])->find($id);
+        ])->where('uuid', $uuid)->first();
 
         if (!$invoice) {
             return response()->json([
@@ -138,9 +138,9 @@ class InvoiceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id): JsonResponse
+    public function update(Request $request, string $uuid): JsonResponse
     {
-        $invoice = Invoice::find($id);
+        $invoice = Invoice::where('uuid', $uuid)->first();
 
         if (!$invoice) {
             return response()->json([
@@ -150,7 +150,7 @@ class InvoiceController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'invoice_number' => 'sometimes|required|string|unique:invoices,invoice_number,' . $id,
+            'invoice_number' => 'sometimes|required|string|unique:invoices,invoice_number,' . $uuid,
             'invoice_date' => 'sometimes|required|date',
             'due_date' => 'sometimes|required|date|after:invoice_date',
             'subtotal' => 'sometimes|required|numeric|min:0',
@@ -192,9 +192,9 @@ class InvoiceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id): JsonResponse
+    public function destroy(string $uuid): JsonResponse
     {
-        $invoice = Invoice::find($id);
+        $invoice = Invoice::where('uuid', $uuid)->first();
 
         if (!$invoice) {
             return response()->json([
@@ -211,4 +211,4 @@ class InvoiceController extends Controller
             'message' => 'Invoice deleted successfully'
         ]);
     }
-} 
+}

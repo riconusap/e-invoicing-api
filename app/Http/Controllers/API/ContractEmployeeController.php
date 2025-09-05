@@ -108,9 +108,9 @@ class ContractEmployeeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id): JsonResponse
+    public function show(string $uuid): JsonResponse
     {
-        $contract = ContractEmployee::with(['employee', 'placement', 'createdBy', 'updatedBy'])->find($id);
+        $contract = ContractEmployee::with(['employee', 'placement', 'createdBy', 'updatedBy'])->where('uuid', $uuid)->first();
 
         if (!$contract) {
             return response()->json([
@@ -128,9 +128,9 @@ class ContractEmployeeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id): JsonResponse
+    public function update(Request $request, string $uuid): JsonResponse
     {
-        $contract = ContractEmployee::find($id);
+        $contract = ContractEmployee::where('uuid', $uuid)->first();
 
         if (!$contract) {
             return response()->json([
@@ -188,9 +188,9 @@ class ContractEmployeeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id): JsonResponse
+    public function destroy(string $uuid): JsonResponse
     {
-        $contract = ContractEmployee::find($id);
+        $contract = ContractEmployee::where('uuid', $uuid)->first();
 
         if (!$contract) {
             return response()->json([
@@ -207,4 +207,4 @@ class ContractEmployeeController extends Controller
             'message' => 'Contract deleted successfully'
         ]);
     }
-} 
+}
