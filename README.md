@@ -1,64 +1,268 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# E-Invoicing Management System
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A full-stack web application for managing invoices, employees, clients, and placements built with Laravel (backend) and Vue.js (frontend).
 
-## About Laravel
+## 📁 Project Structure
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+```
+e-invoicing/
+├── frontend/              # Vue.js frontend application
+│   ├── src/              # Vue.js source code
+│   ├── package.json      # Frontend dependencies
+│   ├── .env.local        # Frontend environment variables
+│   └── README.md         # Frontend documentation
+├── app/                  # Laravel application code
+├── routes/               # API routes
+├── database/             # Database migrations and seeders
+├── config/               # Laravel configuration
+├── .env                  # Backend environment variables
+├── composer.json         # Backend dependencies
+└── README.md            # This file (backend documentation)
+```
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🚀 Tech Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Backend (Laravel API)
+- **Framework:** Laravel 8.x
+- **Language:** PHP 8.x
+- **Database:** MySQL
+- **Authentication:** JWT (JSON Web Tokens)
+- **API:** RESTful API with resource controllers
 
-## Learning Laravel
+### Frontend (Vue.js SPA)
+- **Framework:** Vue 3 with Composition API
+- **Language:** TypeScript
+- **Build Tool:** Vite
+- **Styling:** Tailwind CSS
+- **State Management:** Pinia
+- **UI Components:** Headless UI + Heroicons
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🛠️ Backend Setup (Laravel API)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Prerequisites
+- PHP 8.0 or higher
+- Composer
+- MySQL database
+- Node.js (for frontend)
 
-## Laravel Sponsors
+### Installation
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+1. **Install PHP dependencies:**
+   ```bash
+   composer install
+   ```
 
-### Premium Partners
+2. **Environment setup:**
+   ```bash
+   cp .env.example .env
+   ```
+   
+   Configure your database and other settings in `.env`:
+   ```env
+   DB_DATABASE=e_invoicing
+   DB_USERNAME=your_username
+   DB_PASSWORD=your_password
+   
+   JWT_SECRET=your-jwt-secret-key
+   FRONTEND_URL=http://localhost:3000
+   ```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+3. **Generate application key:**
+   ```bash
+   php artisan key:generate
+   ```
 
-## Contributing
+4. **Run database migrations:**
+   ```bash
+   php artisan migrate
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+5. **Start the development server:**
+   ```bash
+   php artisan serve
+   ```
 
-## Code of Conduct
+The API will be available at `http://localhost:8000`
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 📚 API Documentation
 
-## Security Vulnerabilities
+### Authentication Endpoints
+```
+POST /api/auth/login          # User login
+POST /api/auth/register       # User registration
+POST /api/auth/logout         # User logout
+GET  /api/auth/me            # Get current user
+POST /api/auth/refresh       # Refresh JWT token
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Resource Endpoints (Protected)
+```
+# Employees
+GET    /api/employees         # List employees
+POST   /api/employees         # Create employee
+GET    /api/employees/{id}    # Get employee
+PUT    /api/employees/{id}    # Update employee
+DELETE /api/employees/{id}    # Delete employee
 
-## License
+# Clients
+GET    /api/clients           # List clients
+POST   /api/clients           # Create client
+GET    /api/clients/{id}      # Get client
+PUT    /api/clients/{id}      # Update client
+DELETE /api/clients/{id}      # Delete client
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# Placements
+GET    /api/placements        # List placements
+POST   /api/placements        # Create placement
+GET    /api/placements/{id}   # Get placement
+PUT    /api/placements/{id}   # Update placement
+DELETE /api/placements/{id}   # Delete placement
+
+# Invoices
+GET    /api/invoices          # List invoices
+POST   /api/invoices          # Create invoice
+GET    /api/invoices/{id}     # Get invoice
+PUT    /api/invoices/{id}     # Update invoice
+DELETE /api/invoices/{id}     # Delete invoice
+```
+
+## 🚀 Frontend Setup
+
+The frontend is a separate Vue.js application located in the `frontend/` directory.
+
+**Quick start:**
+```bash
+cd frontend
+npm install
+cp .env.example .env.local
+npm run dev
+```
+
+For detailed frontend setup instructions, see [frontend/README.md](frontend/README.md)
+
+## 🔧 Development
+
+### Running Both Applications
+
+1. **Start the Laravel backend:**
+   ```bash
+   php artisan serve
+   ```
+
+2. **Start the Vue.js frontend:**
+   ```bash
+   cd frontend
+   npm run dev
+   ```
+
+3. **Access the applications:**
+   - Backend API: http://localhost:8000
+   - Frontend App: http://localhost:5173
+
+### Database Seeding
+
+```bash
+# Create and run seeders
+php artisan db:seed
+```
+
+### Testing
+
+```bash
+# Run backend tests
+php artisan test
+
+# Run frontend tests
+cd frontend
+npm run test
+```
+
+## 🌟 Features
+
+### 🔐 Authentication
+- JWT-based authentication
+- User registration and login
+- Protected routes
+- Token refresh mechanism
+
+### 👥 Employee Management
+- CRUD operations for employees
+- Employee profile management
+- Search and filtering
+
+### 🏢 Client Management
+- Client information management
+- Company details tracking
+- Contact management
+
+### 📍 Placement Management
+- Employee placement tracking
+- Client-employee relationships
+- Placement status management
+
+### 🧾 Invoice Management
+- Invoice creation and management
+- Status tracking (Paid, Unpaid, Overdue)
+- PDF generation (future feature)
+- Payment tracking
+
+## 📝 Environment Variables
+
+### Backend (.env)
+```env
+# Application
+APP_NAME="E-Invoicing API"
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://localhost:8000
+
+# Database
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=e_invoicing
+DB_USERNAME=root
+DB_PASSWORD=
+
+# JWT
+JWT_SECRET=your-jwt-secret-key
+JWT_TTL=60
+
+# CORS
+FRONTEND_URL=http://localhost:3000
+```
+
+### Frontend (.env.local)
+```env
+# API Configuration
+VITE_API_BASE_URL=http://localhost:8000/api
+VITE_BACKEND_URL=http://localhost:8000
+
+# Application
+VITE_APP_NAME="E-Invoicing Frontend"
+```
+
+## 🚀 Deployment
+
+### Backend Deployment
+1. Configure production environment variables
+2. Run migrations: `php artisan migrate --force`
+3. Clear and cache config: `php artisan config:cache`
+4. Set up web server (Nginx/Apache)
+
+### Frontend Deployment
+1. Build for production: `npm run build`
+2. Deploy `dist/` folder to static hosting
+3. Configure environment variables for production API
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
+
+## 📄 License
+
+This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
