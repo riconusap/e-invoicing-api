@@ -15,6 +15,7 @@ class UserSession extends Model
         'user_id',
         'token',
         'token_hash',
+        'role_id',
         'ip_address',
         'user_agent',
         'last_activity',

@@ -21,7 +21,7 @@ class AuthController extends Controller
     public function __construct()
     {
         // Middleware 'auth:api' akan melindungi method kecuali 'login' dan 'register'
-        $this->middleware('auth:api', ['except' => ['login', 'register', 'isLoggedIn']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'isLoggedIn', 'forgotPassword', 'resetPassword']]);
     }
 
     public function login(Request $request)
@@ -172,6 +172,54 @@ class AuthController extends Controller
             ]
         ]);
     }
+
+    public function logoutAllExceptCurrent()
+    {
+        $user = auth('api')->user();
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not authenticated'
+            ], 401);
+        }
+
+        if ($user->role_id !== 1) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not authenticated'
+            ], 401);
+        }
+
+        $currentTokenHash = hash('sha256', JWTAuth::getToken());
+
+        $count = $user->sessions()
+            ->where('is_active', true)
+            ->where('token_hash', '!=', $currentTokenHash)->count();
+
+        // dd($count);
+
+        if ($count === 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No other active sessions found'
+            ]);
+        }
+
+        // Deactivate all sessions for the user except the current one
+        $user->sessions()
+             ->where('is_active', true)
+             ->where('token_hash', '!=', $currentTokenHash)
+             ->update(['is_active' => false]);
+
+        return response()->json([
+            'success' => true,
+            // message harus ada hitungan count nya biar user tau
+
+            'message' => 'Successfully logged out ' . $count .' user from all other devices'
+        ]);
+    }
+
 
     public function logoutFromAllDevices()
     {
