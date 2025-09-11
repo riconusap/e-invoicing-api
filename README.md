@@ -47,7 +47,7 @@ This project is fully containerized with Docker. A simple installation script is
 
 1.  **Clone the repository (if you haven't already):**
     ```bash
-    git clone <repository-url>
+    git clone https://github.com/riconusap/e-invoicing-api.git
     cd e-invoicing-api
     ```
 

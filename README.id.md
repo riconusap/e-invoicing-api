@@ -47,7 +47,7 @@ Proyek ini sepenuhnya dikemas dalam kontainer dengan Docker. Skrip instalasi sed
 
 1.  **Clone repositori (jika Anda belum melakukannya):**
     ```bash
-    git clone <url-repositori>
+    git clone https://github.com/riconusap/e-invoicing-api.git
     cd e-invoicing-api
     ```
 
