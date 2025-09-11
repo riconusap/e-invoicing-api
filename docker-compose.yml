@@ -37,6 +37,7 @@ services:
         - MYSQL_DATABASE=mydb
         - MYSQL_USER=myuser
         - MYSQL_PASSWORD=mypass
+    command: --default-authentication-plugin=mysql_native_password
     volumes:
       - dbdata:/var/lib/mysql
     ports:

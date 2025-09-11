@@ -10,17 +10,17 @@ then
 fi
 
 print_green() {
-  echo -e "\e[32m$1\e[0m"
+  printf "\033[32m%s\033[0m\n" "$1"
 }
 
 # Function to print messages in red
 print_red() {
-  echo -e "\e[31m$1\e[0m"
+  printf "\033[31m%s\033[0m\n" "$1"
 }
 
 # Function to print messages in yellow
 print_yellow() {
-  echo -e "\e[33m$1\e[0m"
+  printf "\033[33m%s\033[0m\n" "$1"
 }
 
 # Check if Docker is installed
@@ -81,7 +81,44 @@ if [ $? -ne 0 ]; then
 fi
 print_green "Application key generated."
 
-# Step 5: Run database migrations and seeders
+# Step 5: Generate JWT secret
+print_yellow "Generating JWT secret..."
+docker-compose exec app php artisan jwt:secret
+if [ $? -ne 0 ]; then
+    print_red "Failed to generate JWT secret. Exiting."
+    exit 1
+fi
+print_green "JWT secret generated."
+
+# Before add db
+read -p "If the database already exists, do you agree to delete it and add a new database for this project?? (y/n): " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Nn]$ ]]; then
+    print_green "Installation complete! Your application should now be running."
+    print_green "You can access it at http://localhost:8000 (or your configured port)."
+    exit 1
+fi
+
+# Step 6: Run database migrations and seeders
+
+print_yellow "Waiting for MySQL container to be ready..."
+while ! docker-compose exec mysql mysqladmin ping -h mysql -u root -prootpass --silent; do
+    sleep 1
+done
+print_green "MySQL container is ready."
+
+print_yellow "Creating database if not exist..."
+# if einvoicedb is exist drop it and then create einvoicedb
+docker-compose exec app mysql -u root -prootpass -h mysql --skip-ssl -e "DROP DATABASE IF EXISTS einvoicedb; CREATE DATABASE einvoicedb;"
+
+
+if [ $? -ne 0 ]; then
+    print_red "Failed to create database. Exiting."
+    exit 1
+fi
+print_green "Database created."
+
+# Step 6: Run database migrations and seeders
 print_yellow "Running database migrations and seeders..."
 ./run_migrations.sh
 
@@ -91,7 +128,7 @@ if [ $? -ne 0 ]; then
 fi
 print_green "Database migrations and seeders completed."
 
-print_green "Installation complete! Your Laravel application should now be running."
+print_green "Installation complete! Your application should now be running."
 print_green "You can access it at http://localhost:8000 (or your configured port)."
 
 
