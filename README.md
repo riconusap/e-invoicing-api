@@ -68,6 +68,10 @@ This project can be easily set up and run using Docker and Docker Compose. This 
     ```bash
     docker-compose exec app php artisan key:generate
     ```
+5. **Symlink Setup:**
+     ```bash
+    docker-compose exec app php artisan storage:link
+    ```
 
 ## ⚙️ Configuration
 
