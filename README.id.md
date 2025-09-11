@@ -113,6 +113,18 @@ Untuk menjalankan pengisian database, jalankan perintah berikut di dalam kontain
 docker-compose exec app php artisan db:seed
 ```
 
+### Menjalankan Migrasi Satu per Satu
+
+Proyek ini menyediakan skrip untuk menjalankan file migrasi satu per satu secara berurutan. Ini bisa berguna untuk proses *debugging* atau jika Anda memerlukan kontrol lebih saat proses migrasi.
+
+Untuk menggunakan skrip ini, jalankan perintah berikut dari terminal Anda:
+
+```bash
+./run_migrations.sh
+```
+
+**Catatan:** Ini bukanlah cara standar untuk menjalankan migrasi di Laravel. Perintah standar adalah `php artisan migrate`. Gunakan skrip ini hanya jika Anda memiliki kebutuhan khusus untuk menjalankan migrasi secara individual.
+
 ### Pengujian
 
 Untuk menjalankan pengujian backend, jalankan perintah berikut di dalam kontainer Docker `app`:
@@ -135,15 +147,3 @@ Kontribusi sangat diterima! Silakan ikuti langkah-langkah berikut:
 ## 📄 Lisensi
 
 Proyek ini adalah perangkat lunak sumber terbuka yang dilisensikan di bawah [lisensi MIT](https://opensource.org/licenses/MIT).
-
-### Menjalankan Migrasi Satu per Satu
-
-Proyek ini menyediakan skrip untuk menjalankan file migrasi satu per satu secara berurutan. Ini bisa berguna untuk proses *debugging* atau jika Anda memerlukan kontrol lebih saat proses migrasi.
-
-Untuk menggunakan skrip ini, jalankan perintah berikut dari terminal Anda:
-
-```bash
-./run_migrations.sh
-```
-
-**Catatan:** Ini bukanlah cara standar untuk menjalankan migrasi di Laravel. Perintah standar adalah `php artisan migrate`. Gunakan skrip ini hanya jika Anda memiliki kebutuhan khusus untuk menjalankan migrasi secara individual.
