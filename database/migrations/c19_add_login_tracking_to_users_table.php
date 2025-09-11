@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->timestamp('last_login_at')->nullable();
             $table->string('last_login_ip')->nullable();
+            $table->foreignId('role_id')->constrained('role');
         });
     }
 
@@ -23,7 +24,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['last_login_at', 'last_login_ip']);
+            $table->dropColumn(['last_login_at', 'last_login_ip', 'role_id']);
         });
     }
 };

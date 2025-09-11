@@ -64,6 +64,11 @@ class Handler extends ExceptionHandler
         $this->renderable(function (\Exception $e, $request) {
             if ($request->is('api/*')) {
                 $statusCode = method_exists($e, 'getStatusCode') ? $e->getStatusCode() : 500;
+
+                if ($e->getMessage() === 'Route [login] not defined.') {
+                    return response()->json(['success' => false, 'message' => 'User not authenticated'], 401);
+                }
+
                 return response()->json(['message' => 'Server Error', 'error' => $e->getMessage()], $statusCode);
             }
         });

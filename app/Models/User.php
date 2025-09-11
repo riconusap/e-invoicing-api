@@ -24,6 +24,7 @@ class User extends Authenticatable implements JWTSubject // <-- Implementasikan 
         'name',
         'username',
         'email',
+        'role_id',
         'password',
         'employee_id',
         'last_login_at',
@@ -93,6 +94,14 @@ class User extends Authenticatable implements JWTSubject // <-- Implementasikan 
     public function employee()
     {
         return $this->belongsTo(Employee::class);
+    }
+
+    /**
+     * Get the employee record associated with the user.
+     */
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
     }
 
     /**
