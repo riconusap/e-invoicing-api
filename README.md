@@ -43,35 +43,39 @@ This project can be easily set up and run using Docker and Docker Compose. This 
 
 ### Installation and Running
 
-1.  **Build and run the Docker containers:**
-    ```bash
-    docker-compose up --build -d
-    ```
-    This command will:
-    -   Build the Laravel application image.
-    -   Start the Nginx web server.
-    -   Start the MySQL database.
+This project is fully containerized with Docker. A simple installation script is provided to automate the entire setup process.
 
-2.  **Access the Application:**
-    -   The Laravel application serves as a backend API. Direct access to the root URL (`http://localhost:8080`) will result in a `404 Not Found` error as there are no web routes defined.
-    -   API endpoints are accessible under the `/api` prefix. For example, you can access the authentication login endpoint via `http://localhost:8080/api/auth/login` (POST request).
-    -   The MySQL database is accessible on port `3032` from your host machine (`localhost:3032`).
-
-3.  **Run Laravel Migrations and Seeders:**
-    Once the containers are running, execute the following command to set up your database schema and seed initial data:
+1.  **Clone the repository (if you haven't already):**
     ```bash
-    docker-compose exec app php artisan migrate --seed
+    git clone <repository-url>
+    cd e-invoicing-api
     ```
 
-4.  **Generate Application Key:**
-    Generate a unique application key for Laravel:
+2.  **Run the installation script:**
+    First, make the script executable:
     ```bash
-    docker-compose exec app php artisan key:generate
+    chmod +x install.sh
     ```
-5. **Symlink Setup:**
-     ```bash
-    docker-compose exec app php artisan storage:link
+    Then, run the script:
+    ```bash
+    ./install.sh
     ```
+
+The script will guide you through the installation and automate the following steps:
+- Building and starting the Docker containers.
+- Installing Composer dependencies.
+- Creating the `.env` file from `.env.example`.
+- Generating the application key (`APP_KEY`).
+- Generating the JWT secret key (`JWT_SECRET`).
+- Waiting for the database container to be ready.
+- Creating the database.
+- Running database migrations and seeders.
+- Creating the storage symlink.
+
+### Accessing the Application
+
+-   **API:** The API is available at `http://localhost:8080`. Endpoints are prefixed with `/api`. For example, the login endpoint is a POST request to `http://localhost:8080/api/auth/login`.
+-   **Database:** The MySQL database is accessible from your host machine on `localhost:3032`.
 
 ## ⚙️ Configuration
 

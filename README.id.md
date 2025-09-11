@@ -43,35 +43,39 @@ Proyek ini dapat dengan mudah diatur dan dijalankan menggunakan Docker dan Docke
 
 ### Instalasi dan Menjalankan
 
-1.  **Build dan jalankan kontainer Docker:**
-    ```bash
-    docker-compose up --build -d
-    ```
-    Perintah ini akan:
-    -   Membangun image aplikasi Laravel.
-    -   Memulai server web Nginx.
-    -   Memulai database MySQL.
+Proyek ini sepenuhnya dikemas dalam kontainer dengan Docker. Skrip instalasi sederhana disediakan untuk mengotomatiskan seluruh proses penyiapan.
 
-2.  **Akses Aplikasi:**
-    -   Aplikasi Laravel berfungsi sebagai API backend. Akses langsung ke URL root (`http://localhost:8080`) akan menghasilkan error `404 Not Found` karena tidak ada rute web yang didefinisikan.
-    -   Endpoint API dapat diakses di bawah prefiks `/api`. Misalnya, Anda dapat mengakses endpoint login autentikasi melalui `http://localhost:8080/api/auth/login` (permintaan POST).
-    -   Database MySQL dapat diakses pada port `3032` dari mesin host Anda (`localhost:3032`).
-
-3.  **Jalankan Migrasi dan Seeder Laravel:**
-    Setelah kontainer berjalan, jalankan perintah berikut untuk mengatur skema database Anda dan mengisi data awal:
+1.  **Clone repositori (jika Anda belum melakukannya):**
     ```bash
-    docker-compose exec app php artisan migrate --seed
+    git clone <url-repositori>
+    cd e-invoicing-api
     ```
 
-4.  **Buat Kunci Aplikasi:**
-    Buat kunci aplikasi unik untuk Laravel:
+2.  **Jalankan skrip instalasi:**
+    Pertama, buat skrip agar dapat dieksekusi:
     ```bash
-    docker-compose exec app php artisan key:generate
+    chmod +x install.sh
     ```
-5. **Pengaturan Symlink:**
-     ```bash
-    docker-compose exec app php artisan storage:link
+    Kemudian, jalankan skripnya:
+    ```bash
+    ./install.sh
     ```
+
+Skrip ini akan memandu Anda melalui proses instalasi dan mengotomatiskan langkah-langkah berikut:
+- Membangun dan memulai kontainer Docker.
+- Menginstal dependensi Composer.
+- Membuat file `.env` dari `.env.example`.
+- Menghasilkan kunci aplikasi (`APP_KEY`).
+- Menghasilkan kunci rahasia JWT (`JWT_SECRET`).
+- Menunggu hingga kontainer database siap.
+- Membuat database.
+- Menjalankan migrasi dan seeder database.
+- Membuat symlink penyimpanan.
+
+### Mengakses Aplikasi
+
+-   **API:** API tersedia di `http://localhost:8080`. Endpoint diawali dengan `/api`. Sebagai contoh, endpoint login adalah permintaan POST ke `http://localhost:8080/api/auth/login`.
+-   **Database:** Database MySQL dapat diakses dari mesin host Anda di `localhost:3032`.
 
 ## ⚙️ Konfigurasi
 
