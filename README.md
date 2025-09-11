@@ -131,3 +131,15 @@ Contributions are welcome! Please follow these steps:
 ## 📄 License
 
 This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+### Running Migrations One by One
+
+This project provides a script to run migration files one by one in sequence. This can be useful for debugging or if you need more control over the migration process.
+
+To use this script, run the following command from your terminal:
+
+```bash
+./run_migrations.sh
+```
+
+**Note:** This is not the standard way to run migrations in Laravel. The standard command is `php artisan migrate`. Use this script only if you have a specific need to run migrations individually.
