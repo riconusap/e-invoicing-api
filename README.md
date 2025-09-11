@@ -1,267 +1,128 @@
 # E-Invoicing Management System
 
-A full-stack web application for managing invoices, employees, clients, and placements built with Laravel (backend) and Vue.js (frontend).
+A comprehensive backend API application designed for managing invoices, employees, clients, and placements. The system is built with a Laravel API backend.
+
+## 🚀 Features
+
+- **Authentication:** JWT-based user authentication (registration, login, logout, token refresh).
+- **Employee Management:** CRUD operations for employee profiles.
+- **Client Management:** Track client information, company details, and contacts.
+- **Placement Management:** Manage employee placements, client-employee relationships, and placement status.
+- **Invoice Management:** Create and manage invoices, track status (Paid, Unpaid, Overdue).
 
 ## 📁 Project Structure
 
+This project is a Laravel backend API application.
+
 ```
 e-invoicing/
-├── frontend/              # Vue.js frontend application
-│   ├── src/              # Vue.js source code
-│   ├── package.json      # Frontend dependencies
-│   ├── .env.local        # Frontend environment variables
-│   └── README.md         # Frontend documentation
 ├── app/                  # Laravel application code
 ├── routes/               # API routes
 ├── database/             # Database migrations and seeders
 ├── config/               # Laravel configuration
 ├── .env                  # Backend environment variables
-├── composer.json         # Backend dependencies
-└── README.md            # This file (backend documentation)
+└── docker-compose.yml    # Docker setup for the entire application
 ```
 
-## 🚀 Tech Stack
+## 🛠️ Tech Stack
 
 ### Backend (Laravel API)
 - **Framework:** Laravel 8.x
 - **Language:** PHP 8.x
 - **Database:** MySQL
 - **Authentication:** JWT (JSON Web Tokens)
-- **API:** RESTful API with resource controllers
+- **API:** RESTful API
 
-### Frontend (Vue.js SPA)
-- **Framework:** Vue 3 with Composition API
-- **Language:** TypeScript
-- **Build Tool:** Vite
-- **Styling:** Tailwind CSS
-- **State Management:** Pinia
-- **UI Components:** Headless UI + Heroicons
+## 🐳 Docker Setup
 
-## 🛠️ Backend Setup (Laravel API)
+This project can be easily set up and run using Docker and Docker Compose. This setup includes the Laravel application (PHP-FPM), Nginx (web server), and MySQL database.
 
 ### Prerequisites
-- PHP 8.0 or higher
-- Composer
-- MySQL database
-- Node.js (for frontend)
+- Docker
+- Docker Compose
 
-### Installation
+### Installation and Running
 
-1. **Install PHP dependencies:**
-   ```bash
-   composer install
-   ```
+1.  **Build and run the Docker containers:**
+    ```bash
+    docker-compose up --build -d
+    ```
+    This command will:
+    -   Build the Laravel application image.
+    -   Start the Nginx web server.
+    -   Start the MySQL database.
 
-2. **Environment setup:**
-   ```bash
-   cp .env.example .env
-   ```
-   
-   Configure your database and other settings in `.env`:
-   ```env
-   DB_DATABASE=e_invoicing
-   DB_USERNAME=your_username
-   DB_PASSWORD=your_password
-   
-   JWT_SECRET=your-jwt-secret-key
-   FRONTEND_URL=http://localhost:3000
-   ```
+2.  **Access the Application:**
+    -   The Laravel application serves as a backend API. Direct access to the root URL (`http://localhost:8080`) will result in a `404 Not Found` error as there are no web routes defined.
+    -   API endpoints are accessible under the `/api` prefix. For example, you can access the authentication login endpoint via `http://localhost:8080/api/auth/login` (POST request).
+    -   The MySQL database is accessible on port `3032` from your host machine (`localhost:3032`).
 
-3. **Generate application key:**
-   ```bash
-   php artisan key:generate
-   ```
+3.  **Run Laravel Migrations and Seeders:**
+    Once the containers are running, execute the following command to set up your database schema and seed initial data:
+    ```bash
+    docker-compose exec app php artisan migrate --seed
+    ```
 
-4. **Run database migrations:**
-   ```bash
-   php artisan migrate
-   ```
+4.  **Generate Application Key:**
+    Generate a unique application key for Laravel:
+    ```bash
+    docker-compose exec app php artisan key:generate
+    ```
 
-5. **Start the development server:**
-   ```bash
-   php artisan serve
-   ```
+## ⚙️ Configuration
 
-The API will be available at `http://localhost:8000`
+### Environment Variables (`.env`)
 
-## 📚 API Documentation
+After copying `.env.example` to `.env`, configure your application's environment variables. Key database settings are:
 
-### Authentication Endpoints
-```
-POST /api/auth/login          # User login
-POST /api/auth/register       # User registration
-POST /api/auth/logout         # User logout
-GET  /api/auth/me            # Get current user
-POST /api/auth/refresh       # Refresh JWT token
+```env
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=e_invoicing
+DB_USERNAME=root
+DB_PASSWORD=rootpass
 ```
 
-### Resource Endpoints (Protected)
-```
-# Employees
-GET    /api/employees         # List employees
-POST   /api/employees         # Create employee
-GET    /api/employees/{id}    # Get employee
-PUT    /api/employees/{id}    # Update employee
-DELETE /api/employees/{id}    # Delete employee
+*Note: `DB_HOST` is set to `mysql` because that is the service name of the database container within the Docker network.* `DB_PASSWORD` should match the `MYSQL_ROOT_PASSWORD` set in `docker-compose.yml`.
 
-# Clients
-GET    /api/clients           # List clients
-POST   /api/clients           # Create client
-GET    /api/clients/{id}      # Get client
-PUT    /api/clients/{id}      # Update client
-DELETE /api/clients/{id}      # Delete client
+## 🚀 Development
 
-# Placements
-GET    /api/placements        # List placements
-POST   /api/placements        # Create placement
-GET    /api/placements/{id}   # Get placement
-PUT    /api/placements/{id}   # Update placement
-DELETE /api/placements/{id}   # Delete placement
+### Running the Application (without Docker for backend)
 
-# Invoices
-GET    /api/invoices          # List invoices
-POST   /api/invoices          # Create invoice
-GET    /api/invoices/{id}     # Get invoice
-PUT    /api/invoices/{id}     # Update invoice
-DELETE /api/invoices/{id}     # Delete invoice
-```
+If you prefer to run the Laravel backend directly on your host machine:
 
-## 🚀 Frontend Setup
-
-The frontend is a separate Vue.js application located in the `frontend/` directory.
-
-**Quick start:**
-```bash
-cd frontend
-npm install
-cp .env.example .env.local
-npm run dev
-```
-
-For detailed frontend setup instructions, see [frontend/README.md](frontend/README.md)
-
-## 🔧 Development
-
-### Running Both Applications
-
-1. **Start the Laravel backend:**
-   ```bash
-   php artisan serve
-   ```
-
-2. **Start the Vue.js frontend:**
-   ```bash
-   cd frontend
-   npm run dev
-   ```
-
-3. **Access the applications:**
-   - Backend API: http://localhost:8000
-   - Frontend App: http://localhost:5173
+1.  **Start the Laravel backend:**
+    ```bash
+    php artisan serve
+    ```
+    The API will be available at `http://localhost:8000`.
 
 ### Database Seeding
 
+To run database seeding, execute the following command inside the `app` Docker container:
 ```bash
-# Create and run seeders
-php artisan db:seed
+docker-compose exec app php artisan db:seed
 ```
 
 ### Testing
 
+To run backend tests, execute the following command inside the `app` Docker container:
 ```bash
-# Run backend tests
-php artisan test
-
-# Run frontend tests
-cd frontend
-npm run test
+docker-compose exec app php artisan test
 ```
-
-## 🌟 Features
-
-### 🔐 Authentication
-- JWT-based authentication
-- User registration and login
-- Protected routes
-- Token refresh mechanism
-
-### 👥 Employee Management
-- CRUD operations for employees
-- Employee profile management
-- Search and filtering
-
-### 🏢 Client Management
-- Client information management
-- Company details tracking
-- Contact management
-
-### 📍 Placement Management
-- Employee placement tracking
-- Client-employee relationships
-- Placement status management
-
-### 🧾 Invoice Management
-- Invoice creation and management
-- Status tracking (Paid, Unpaid, Overdue)
-- PDF generation (future feature)
-- Payment tracking
-
-## 📝 Environment Variables
-
-### Backend (.env)
-```env
-# Application
-APP_NAME="E-Invoicing API"
-APP_ENV=local
-APP_DEBUG=true
-APP_URL=http://localhost:8000
-
-# Database
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=e_invoicing
-DB_USERNAME=root
-DB_PASSWORD=
-
-# JWT
-JWT_SECRET=your-jwt-secret-key
-JWT_TTL=60
-
-# CORS
-FRONTEND_URL=http://localhost:3000
-```
-
-### Frontend (.env.local)
-```env
-# API Configuration
-VITE_API_BASE_URL=http://localhost:8000/api
-VITE_BACKEND_URL=http://localhost:8000
-
-# Application
-VITE_APP_NAME="E-Invoicing Frontend"
-```
-
-## 🚀 Deployment
-
-### Backend Deployment
-1. Configure production environment variables
-2. Run migrations: `php artisan migrate --force`
-3. Clear and cache config: `php artisan config:cache`
-4. Set up web server (Nginx/Apache)
-
-### Frontend Deployment
-1. Build for production: `npm run build`
-2. Deploy `dist/` folder to static hosting
-3. Configure environment variables for production API
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+Contributions are welcome! Please follow these steps:
+
+1.  Fork the repository.
+2.  Create a new feature branch (`git checkout -b feature/YourFeatureName`).
+3.  Make your changes.
+4.  Add tests for your changes if applicable.
+5.  Commit your changes (`git commit -m 'Add new feature'`).
+6.  Push to the branch (`git push origin feature/YourFeatureName`).
+7.  Open a Pull Request.
 
 ## 📄 License
 
