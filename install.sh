@@ -129,15 +129,21 @@ fi
 print_green "Database migrations and seeders completed."
 
 # Step 7: Create storage link
+if [ -L ./public/storage ]; then
+    print_yellow "Existing storage link found. Removing..."
+    rm ./public/storage
+fi
+
 print_yellow "Creating storage link..."
 docker-compose exec app php artisan storage:link
 
 if [ $? -ne 0 ]; then
     print_red "Failed to create storage link. Exiting."
     exit 1
-fi
 print_green "Storage link created."
-
+fi
+print_green "=============================================================="
 print_green "Installation complete! Your application should now be running."
+print_green "You can access it at http://localhost:8000 (or your configured port)."
 
 
