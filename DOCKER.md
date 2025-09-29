@@ -190,6 +190,258 @@ docker system prune -f
 ./docker-setup.sh
 ```
 
+## 🌊 Digital Ocean Production Deployment
+
+### Prerequisites for Digital Ocean
+- Ubuntu 20.04+ droplet
+- At least 1GB RAM (2GB recommended)
+- Sudo access to the server
+
+### Quick Production Deployment
+
+1. **Upload your code to the server:**
+   ```bash
+   # On your local machine
+   rsync -avz --exclude node_modules --exclude vendor . user@your-server-ip:/home/user/e-invoicing-api/
+   
+   # Or use git
+   ssh user@your-server-ip
+   git clone https://github.com/your-username/e-invoicing-api.git
+   cd e-invoicing-api
+   ```
+
+2. **Run the deployment script:**
+   ```bash
+   # This will install Docker, configure firewall, and deploy the app
+   ./deploy.sh
+   ```
+
+3. **Configure your domain (optional):**
+   ```bash
+   # Update your DNS A record to point to your server IP
+   # Then update .env file:
+   APP_URL=http://yourdomain.com
+   ```
+
+### Manual Production Setup
+
+If you prefer manual setup:
+
+```bash
+# 1. Install Docker
+curl -fsSL https://get.docker.com -o get-docker.sh
+sh get-docker.sh
+sudo usermod -aG docker $USER
+
+# 2. Install Docker Compose
+sudo curl -L "https://github.com/docker/compose/releases/download/v2.20.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+# 3. Configure firewall
+sudo ufw allow ssh
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+sudo ufw --force enable
+
+# 4. Deploy application
+cp .env.production .env
+# Edit .env with your settings
+docker-compose -f docker-compose.prod.yml up -d
+```
+
+### Production Configuration
+
+Create `.env` file from `.env.production` template and update:
+```bash
+APP_URL=http://YOUR_SERVER_IP_OR_DOMAIN
+APP_KEY=base64:YOUR_GENERATED_KEY
+DB_PASSWORD=YOUR_SECURE_DB_PASSWORD
+REDIS_PASSWORD=YOUR_SECURE_REDIS_PASSWORD
+```
+
+### Digital Ocean Specific Troubleshooting
+
+#### 🚫 "Can't access API from external"
+
+**Possible causes and solutions:**
+
+1. **Port binding issue:**
+   ```bash
+   # Check if nginx is binding to all interfaces
+   docker-compose -f docker-compose.prod.yml exec nginx netstat -tlnp
+   # Should show 0.0.0.0:80, not 127.0.0.1:80
+   ```
+
+2. **Firewall blocking connections:**
+   ```bash
+   # Check UFW status
+   sudo ufw status
+   
+   # Allow HTTP traffic
+   sudo ufw allow 80/tcp
+   sudo ufw allow 443/tcp
+   
+   # Check iptables
+   sudo iptables -L
+   ```
+
+3. **Digital Ocean Firewall:**
+   - Check Digital Ocean control panel → Networking → Firewalls
+   - Ensure inbound rules allow HTTP (80) and HTTPS (443)
+
+4. **Container health issues:**
+   ```bash
+   # Check container status
+   docker-compose -f docker-compose.prod.yml ps
+   
+   # Check container logs
+   docker-compose -f docker-compose.prod.yml logs nginx
+   docker-compose -f docker-compose.prod.yml logs app
+   
+   # Test internal connectivity
+   docker-compose -f docker-compose.prod.yml exec nginx curl -f http://app:9000
+   ```
+
+5. **Nginx configuration:**
+   ```bash
+   # Test nginx config
+   docker-compose -f docker-compose.prod.yml exec nginx nginx -t
+   
+   # Check nginx is listening
+   docker-compose -f docker-compose.prod.yml exec nginx ss -tlnp
+   ```
+
+#### 🔍 Debugging Steps
+
+1. **Test from inside the server:**
+   ```bash
+   # Test locally on the server
+   curl http://localhost/health
+   curl http://localhost/api/
+   
+   # If this works but external doesn't, it's a firewall issue
+   ```
+
+2. **Test network connectivity:**
+   ```bash
+   # From your local machine
+   telnet YOUR_SERVER_IP 80
+   nmap -p 80 YOUR_SERVER_IP
+   ```
+
+3. **Check application logs:**
+   ```bash
+   # Laravel application logs
+   docker-compose -f docker-compose.prod.yml exec app tail -f storage/logs/laravel.log
+   
+   # Nginx access logs
+   docker-compose -f docker-compose.prod.yml logs nginx | grep -E "(GET|POST|PUT|DELETE)"
+   ```
+
+4. **Verify environment:**
+   ```bash
+   # Check environment variables
+   docker-compose -f docker-compose.prod.yml exec app env | grep APP_
+   
+   # Test database connection
+   docker-compose -f docker-compose.prod.yml exec app php artisan tinker --execute="DB::connection()->getPdo();"
+   ```
+
+#### 🔧 Common Fixes
+
+1. **Force rebuild containers:**
+   ```bash
+   docker-compose -f docker-compose.prod.yml down -v
+   docker-compose -f docker-compose.prod.yml build --no-cache
+   docker-compose -f docker-compose.prod.yml up -d
+   ```
+
+2. **Reset networking:**
+   ```bash
+   docker network prune -f
+   docker-compose -f docker-compose.prod.yml down
+   docker-compose -f docker-compose.prod.yml up -d
+   ```
+
+3. **Check and fix permissions:**
+   ```bash
+   docker-compose -f docker-compose.prod.yml exec app chown -R www-data:www-data storage bootstrap/cache
+   docker-compose -f docker-compose.prod.yml exec app chmod -R 775 storage bootstrap/cache
+   ```
+
+#### 📊 Monitoring Commands
+
+```bash
+# Container resource usage
+docker stats
+
+# System resource usage
+htop
+df -h
+free -h
+
+# Service status
+docker-compose -f docker-compose.prod.yml ps
+systemctl status docker
+
+# Network connections
+ss -tlnp | grep :80
+netstat -tlnp | grep :80
+```
+
+### 🎯 Quick Fix Commands
+
+```bash
+# Restart everything
+docker-compose -f docker-compose.prod.yml restart
+
+# Rebuild and restart
+docker-compose -f docker-compose.prod.yml down
+docker-compose -f docker-compose.prod.yml up -d --build
+
+# Check if API is responding
+curl -I http://$(curl -s ifconfig.me)/health
+
+# View real-time logs
+docker-compose -f docker-compose.prod.yml logs -f --tail=50
+```
+
+### 💡 Production Tips
+
+1. **Use a domain instead of IP:**
+   - Point your domain A record to your server IP
+   - Update `APP_URL` in `.env`
+   - Consider setting up SSL/TLS with Let's Encrypt
+
+2. **Set up monitoring:**
+   - Use tools like Uptime Robot for external monitoring
+   - Set up log aggregation
+   - Monitor disk space and memory usage
+
+3. **Regular maintenance:**
+   ```bash
+   # Clean up old containers and images
+   docker system prune -f
+   
+   # Update system packages
+   sudo apt update && sudo apt upgrade -y
+   
+   # Backup database
+   docker-compose -f docker-compose.prod.yml exec mysql mysqldump -u root -p einvoicedb > backup.sql
+   ```
+
+## 📚 Additional Resources
+
+- [Laravel Documentation](https://laravel.com/docs)
+- [Docker Documentation](https://docs.docker.com)
+- [PHP-FPM Configuration](https://www.php.net/manual/en/install.fpm.configuration.php)
+- [Digital Ocean Docker Guide](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04)
+
+1. **Port conflicts**: Change ports in `docker-compose.yml`
+2. **Permission denied**: Run `make permissions`
+3. **Database connection**: Ensure MySQL is fully started (wait 30s)
+4. **Composer errors**: Clear cache with `docker-compose exec app composer clear-cache`
+
 ## 📚 Additional Resources
 
 - [Laravel Documentation](https://laravel.com/docs)
