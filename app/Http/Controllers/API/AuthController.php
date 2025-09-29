@@ -164,7 +164,6 @@ class AuthController extends Controller
                 'last_login_at' => $user->last_login_at,
                 'last_login_ip' => $user->last_login_ip,
                 'current_ip' => request()->ip(),
-                // Calculate login duration in minutes (positive value)
                 'login_duration' => $user->last_login_at
                     ? abs(now()->diffInMinutes($user->last_login_at, false))
                     : null,

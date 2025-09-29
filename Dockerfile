@@ -11,13 +11,33 @@ RUN apk add --no-cache \
     icu-dev \
     postgresql-dev \
     mysql-client \
-    nginx
+    nginx \
+    oniguruma-dev \
+    libxml2-dev \
+    autoconf \
+    g++ \
+    make
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo_mysql zip exif pcntl gd intl
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) \
+        pdo_mysql \
+        zip \
+        exif \
+        pcntl \
+        gd \
+        intl \
+        mbstring \
+        xml \
+        bcmath \
+        opcache
 
 # Install Composer
 COPY --from=composer/composer:latest-bin /composer /usr/bin/composer
+
+# Copy PHP configuration
+COPY docker/php/php.ini /usr/local/etc/php/php.ini
+COPY docker/php/www.conf /usr/local/etc/php-fpm.d/www.conf
 
 # Set working directory
 WORKDIR /var/www/html
