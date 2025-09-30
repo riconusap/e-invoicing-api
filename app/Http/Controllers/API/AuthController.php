@@ -37,7 +37,7 @@ class AuthController extends Controller
 
         $credentials = $request->only('email', 'password');
         if (! $token = auth('api')->attempt($credentials)) {
-            return response()->json(['error' => 'Wrong Email or Password'], 401);
+            return response()->json(['error' => 'Wrong Email or Password123'], 401);
         }
 
         $user = auth('api')->user();
