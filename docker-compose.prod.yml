@@ -25,7 +25,8 @@ services:
     depends_on:
       - mysql
     networks:
-      - app-network
+      - riknus-networks
+      - nginx-proxy_proxy-network
     healthcheck:
       test: ["CMD", "php", "artisan", "tinker", "--execute=echo 'OK';"]
       timeout: 10s
@@ -46,7 +47,8 @@ services:
     depends_on:
       - app
     networks:
-      - app-network
+      - riknus-networks
+      - nginx-proxy_proxy-network
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost/health"]
       timeout: 10s
@@ -67,7 +69,8 @@ services:
       - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf:ro
       - /var/log/mysql:/var/log/mysql
     networks:
-      - app-network
+      - riknus-networks
+      - nginx-proxy_proxy-network
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 20s
@@ -81,15 +84,20 @@ services:
     volumes:
       - redis_data_prod:/data
     networks:
-      - app-network
+      - riknus-networks
+      - nginx-proxy_proxy-network
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       timeout: 10s
       retries: 3
 
 networks:
-  app-network:
+  riknus-networks:
     driver: bridge
+    name: riknus-networks
+    external: true
+  nginx-proxy_proxy-network:
+    external: true
 
 volumes:
   mysql_data_prod:
