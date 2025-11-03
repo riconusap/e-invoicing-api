@@ -28,7 +28,7 @@ MIGRATION_FILES=(
 
 for MIGRATION_FILE in "${MIGRATION_FILES[@]}"; do
   echo "Running migration: ${MIGRATION_FILE}"
-  docker-compose exec app php artisan migrate --path="${MIGRATION_FILE}"
+  docker-compose exec app php artisan migrate --path="${MIGRATION_FILE}" --force
   echo "----------------------------------------"
 done
 

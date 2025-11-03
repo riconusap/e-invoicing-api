@@ -16,7 +16,8 @@ RUN apk add --no-cache \
     libxml2-dev \
     autoconf \
     g++ \
-    make
+    make \
+    openssl-dev
 
 # Install PHP extensions
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
@@ -31,6 +32,9 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
         xml \
         bcmath \
         opcache
+
+# Install phpredis via PECL
+RUN pecl install redis && docker-php-ext-enable redis || true
 
 # Install Composer
 COPY --from=composer/composer:latest-bin /composer /usr/bin/composer
