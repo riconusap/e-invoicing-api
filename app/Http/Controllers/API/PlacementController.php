@@ -33,7 +33,7 @@ class PlacementController extends Controller
         }
 
         // Pagination
-        $perPage = $request->get('per_page', 15);
+        $perPage = min($request->get('per_page', 15), 100);
         $placements = $query->paginate($perPage);
 
         return response()->json([
@@ -97,6 +97,9 @@ class PlacementController extends Controller
             ], 404);
         }
 
+        // Check authorization
+        $this->authorize('view', $placement);
+
         return response()->json([
             'success' => true,
             'data' => $placement
@@ -116,6 +119,9 @@ class PlacementController extends Controller
                 'message' => 'Placement not found'
             ], 404);
         }
+
+        // Check authorization
+        $this->authorize('update', $placement);
 
         $validator = Validator::make($request->all(), [
             'name' => 'sometimes|required|string|max:255',
@@ -158,6 +164,9 @@ class PlacementController extends Controller
                 'message' => 'Placement not found'
             ], 404);
         }
+
+        // Check authorization
+        $this->authorize('delete', $placement);
 
         $placement->update(['deleted_by' => auth()->id()]);
         $placement->delete();

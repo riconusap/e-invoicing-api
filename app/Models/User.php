@@ -121,6 +121,14 @@ class User extends Authenticatable implements JWTSubject // <-- Implementasikan 
     }
 
     /**
+     * Check if user is an admin
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role && strtolower($this->role->name) === 'admin';
+    }
+
+    /**
      * Check if user is currently logged in (has valid token)
      */
     public function isLoggedIn()
@@ -183,20 +191,13 @@ class User extends Authenticatable implements JWTSubject // <-- Implementasikan 
      */
     public function cleanExpiredSessions()
     {
-        $this->sessions()->where('is_active', true)->get()->each(function ($session) {
-            try {
-                // Try to decode the token to check if it's expired
-                $token = $session->token;
-                $payload = \Tymon\JWTAuth\Facades\JWTAuth::setToken($token)->getPayload();
+        // Get JWT TTL from config (default 60 minutes)
+        $jwtTtl = config('jwt.ttl', 60);
 
-                // If we get here, token is valid, so we don't deactivate it
-            } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-                // Token is expired, deactivate the session
-                $session->update(['is_active' => false]);
-            } catch (\Exception $e) {
-                // Any other JWT error, deactivate the session
-                $session->update(['is_active' => false]);
-            }
-        });
+        // Deactivate sessions older than JWT TTL
+        $this->sessions()
+            ->where('is_active', true)
+            ->where('last_activity', '<', now()->subMinutes($jwtTtl))
+            ->update(['is_active' => false]);
     }
 }

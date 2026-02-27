@@ -30,7 +30,7 @@ class ClientController extends Controller
         }
 
         // Pagination
-        $perPage = $request->get('per_page', 15);
+        $perPage = min($request->get('per_page', 15), 100);
         $clients = $query->paginate($perPage);
 
         return response()->json([
@@ -111,6 +111,9 @@ class ClientController extends Controller
             ], 404);
         }
 
+        // Check authorization
+        $this->authorize('view', $client);
+
         return response()->json([
             'success' => true,
             'data' => $client
@@ -130,6 +133,9 @@ class ClientController extends Controller
                 'message' => 'Client not found'
             ], 404);
         }
+
+        // Check authorization
+        $this->authorize('update', $client);
 
         $validator = Validator::make($request->all(), [
             'name' => 'sometimes|required|string|max:255',
@@ -195,12 +201,16 @@ class ClientController extends Controller
             ], 404);
         }
 
+        // Check authorization
+        $this->authorize('delete', $client);
+
         // Delete logo file if exists
         if ($client->logo && Storage::disk('public')->exists($client->logo)) {
             Storage::disk('public')->delete($client->logo);
         }
 
         $client->update(['deleted_by' => auth()->id()]);
+
         $client->delete();
 
         return response()->json([

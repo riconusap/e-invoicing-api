@@ -105,6 +105,9 @@ class ContractClientController extends Controller
             ], 404);
         }
 
+        // Check authorization
+        $this->authorize('view', $contract);
+
         return response()->json([
             'success' => true,
             'data' => $contract
@@ -124,6 +127,9 @@ class ContractClientController extends Controller
                 'message' => 'Contract not found'
             ], 404);
         }
+
+        // Check authorization
+        $this->authorize('update', $contract);
 
         $validator = Validator::make($request->all(), [
             'placement_id' => 'sometimes|required|exists:placements,id',
@@ -170,6 +176,9 @@ class ContractClientController extends Controller
                 'message' => 'Contract not found'
             ], 404);
         }
+
+        // Check authorization
+        $this->authorize('delete', $contract);
 
         $contract->update(['deleted_by' => auth()->id()]);
         $contract->delete();

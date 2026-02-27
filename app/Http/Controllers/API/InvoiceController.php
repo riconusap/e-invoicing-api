@@ -87,6 +87,18 @@ class InvoiceController extends Controller
             ], 422);
         }
 
+        // Validate that total equals subtotal + tax
+        $calculatedTotal = $request->subtotal + $request->tax;
+        if (abs($calculatedTotal - $request->total) > 0.01) { // Allow 0.01 difference for floating point
+            return response()->json([
+                'success' => false,
+                'message' => 'Total must equal subtotal + tax',
+                'errors' => [
+                    'total' => ['Total must equal subtotal + tax']
+                ]
+            ], 422);
+        }
+
         $invoice = Invoice::create([
             'uuid' => Str::uuid(),
             'invoice_number' => $request->invoice_number,
@@ -129,6 +141,9 @@ class InvoiceController extends Controller
             ], 404);
         }
 
+        // Check authorization
+        $this->authorize('view', $invoice);
+
         return response()->json([
             'success' => true,
             'data' => $invoice
@@ -148,6 +163,9 @@ class InvoiceController extends Controller
                 'message' => 'Invoice not found'
             ], 404);
         }
+
+        // Check authorization
+        $this->authorize('update', $invoice);
 
         $validator = Validator::make($request->all(), [
             'invoice_number' => 'sometimes|required|string|unique:invoices,invoice_number,' . $uuid,
@@ -202,6 +220,9 @@ class InvoiceController extends Controller
                 'message' => 'Invoice not found'
             ], 404);
         }
+
+        // Check authorization
+        $this->authorize('delete', $invoice);
 
         $invoice->update(['deleted_by' => auth()->id()]);
         $invoice->delete();

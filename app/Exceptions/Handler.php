@@ -38,6 +38,13 @@ class Handler extends ExceptionHandler
     public function register()
     {
         $this->reportable(function (Throwable $e) {
+            // Log all exceptions
+            \Log::error('Exception occurred', [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
         });
 
         $this->renderable(function (NotFoundHttpException $e, $request) {
@@ -69,7 +76,10 @@ class Handler extends ExceptionHandler
                     return response()->json(['success' => false, 'message' => 'User not authenticated'], 401);
                 }
 
-                return response()->json(['message' => 'Server Error', 'error' => $e->getMessage()], $statusCode);
+                // Don't expose error details in production
+                $message = config('app.debug') ? $e->getMessage() : 'Server Error';
+
+                return response()->json(['message' => $message], $statusCode);
             }
         });
     }

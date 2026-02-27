@@ -100,6 +100,9 @@ class PicExternalController extends Controller
             ], 404);
         }
 
+        // Check authorization
+        $this->authorize('view', $picExternal);
+
         return response()->json([
             'success' => true,
             'data' => $picExternal
@@ -119,6 +122,9 @@ class PicExternalController extends Controller
                 'message' => 'PIC External not found'
             ], 404);
         }
+
+        // Check authorization
+        $this->authorize('update', $picExternal);
 
         $validator = Validator::make($request->all(), [
             'name' => 'sometimes|required|string|max:255',
@@ -164,6 +170,9 @@ class PicExternalController extends Controller
             ], 404);
         }
 
+        // Check authorization
+        $this->authorize('delete', $picExternal);
+
         $picExternal->update(['deleted_by' => auth()->id()]);
         $picExternal->delete();
 
@@ -172,4 +181,4 @@ class PicExternalController extends Controller
             'message' => 'PIC External deleted successfully'
         ]);
     }
-} 
+}

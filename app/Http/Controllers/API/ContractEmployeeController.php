@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\ContractEmployee;
+use App\Models\Employee;
+use App\Models\Placement;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
@@ -28,7 +30,15 @@ class ContractEmployeeController extends Controller
 
         // Filter by employee
         if ($request->has('employee_id')) {
-            $query->where('employee_id', $request->employee_id);
+            // get employee id by request->employee_id
+            $employee = Employee::where('uuid', $request->employee_id)->first();
+            if (!$employee) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Employee not found'
+                ], 404);
+            }
+            $query->where('employee_id', $employee->id);
         }
 
         // Filter by placement
@@ -68,8 +78,8 @@ class ContractEmployeeController extends Controller
             'account_holder_name' => 'required|string|max:255',
             'no_bpjstk' => 'nullable|string|max:255',
             'no_bpjskes' => 'nullable|string|max:255',
-            'employee_id' => 'required|exists:employees,id',
-            'placement_id' => 'required|exists:placements,id',
+            'employee_id' => 'required|exists:employees,uuid',
+            'placement_id' => 'required|exists:placements,uuid',
         ]);
 
         if ($validator->fails()) {
@@ -80,6 +90,23 @@ class ContractEmployeeController extends Controller
             ], 422);
         }
 
+        // Ensure employee exists and get its ID
+        $employee = Employee::where('uuid', $request->employee_id)->first();
+        if (!$employee) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Employee not found'
+            ], 404);
+        }
+
+        //Ensure placement exists and get its ID
+        $placement = Placement::where('uuid', $request->placement_id)->first();
+        if (!$placement) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Placement not found'
+            ], 404);
+        }
         $contract = ContractEmployee::create([
             'uuid' => Str::uuid(),
             'nip' => $request->nip,
@@ -92,8 +119,8 @@ class ContractEmployeeController extends Controller
             'account_holder_name' => $request->account_holder_name,
             'no_bpjstk' => $request->no_bpjstk,
             'no_bpjskes' => $request->no_bpjskes,
-            'employee_id' => $request->employee_id,
-            'placement_id' => $request->placement_id,
+            'employee_id' => $employee->id,
+            'placement_id' => $placement->id,
             'created_by' => auth()->id(),
             'updated_by' => auth()->id(),
         ]);
@@ -119,6 +146,9 @@ class ContractEmployeeController extends Controller
             ], 404);
         }
 
+        // Check authorization
+        $this->authorize('view', $contract);
+
         return response()->json([
             'success' => true,
             'data' => $contract
@@ -139,6 +169,9 @@ class ContractEmployeeController extends Controller
             ], 404);
         }
 
+        // Check authorization
+        $this->authorize('update', $contract);
+
         $validator = Validator::make($request->all(), [
             'nip' => 'nullable|string|max:255',
             'start_on' => 'sometimes|required|date',
@@ -150,8 +183,8 @@ class ContractEmployeeController extends Controller
             'account_holder_name' => 'sometimes|required|string|max:255',
             'no_bpjstk' => 'nullable|string|max:255',
             'no_bpjskes' => 'nullable|string|max:255',
-            'employee_id' => 'sometimes|required|exists:employees,id',
-            'placement_id' => 'sometimes|required|exists:placements,id',
+            'employee_id' => 'sometimes|required|exists:employees,uuid',
+            'placement_id' => 'sometimes|required|exists:placements,uuid',
         ]);
 
         if ($validator->fails()) {
@@ -160,6 +193,24 @@ class ContractEmployeeController extends Controller
                 'message' => 'Validation errors',
                 'errors' => $validator->errors()
             ], 422);
+        }
+
+        // Ensure employee exists and get its ID
+        $employee = Employee::where('uuid', $request->employee_id)->first();
+        if (!$employee) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Employee not found'
+            ], 404);
+        }
+
+        //Ensure placement exists and get its ID
+        $placement = Placement::where('uuid', $request->placement_id)->first();
+        if (!$placement) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Placement not found'
+            ], 404);
         }
 
         $contract->update([
@@ -173,8 +224,8 @@ class ContractEmployeeController extends Controller
             'account_holder_name' => $request->account_holder_name ?? $contract->account_holder_name,
             'no_bpjstk' => $request->no_bpjstk ?? $contract->no_bpjstk,
             'no_bpjskes' => $request->no_bpjskes ?? $contract->no_bpjskes,
-            'employee_id' => $request->employee_id ?? $contract->employee_id,
-            'placement_id' => $request->placement_id ?? $contract->placement_id,
+            'employee_id' => $employee->id ?? $contract->employee_id,
+            'placement_id' => $placement->id ?? $contract->placement_id,
             'updated_by' => auth()->id(),
         ]);
 
@@ -198,6 +249,9 @@ class ContractEmployeeController extends Controller
                 'message' => 'Contract not found'
             ], 404);
         }
+
+        // Check authorization
+        $this->authorize('delete', $contract);
 
         $contract->update(['deleted_by' => auth()->id()]);
         $contract->delete();

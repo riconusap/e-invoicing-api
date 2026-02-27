@@ -11,12 +11,12 @@ use App\Http\Controllers\API\InvoiceController;
 use App\Http\Controllers\API\PicExternalController;
 
 Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
-    Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:5,1');
+    Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,1');
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
-    Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
-    Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+    Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->middleware('throttle:3,1');
+    Route::post('/reset-password', [AuthController::class, 'resetPassword'])->middleware('throttle:3,1');
     Route::get('/me', [AuthController::class, 'me']);
     Route::get('/is-logged-in', [AuthController::class, 'isLoggedIn']);
     Route::get('/login-info', [AuthController::class, 'loginInfo']);
@@ -27,7 +27,10 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
 
 // Protected API Resources
 Route::middleware('auth:api')->group(function () {
+    // Employee routes with custom endpoint for suggesting NIP
+    Route::get('/employees/suggest-nip', [EmployeeController::class, 'suggestNip']);
     Route::apiResource('employees', EmployeeController::class);
+
     Route::apiResource('clients', ClientController::class);
     Route::apiResource('placements', PlacementController::class);
     Route::apiResource('contract-clients', ContractClientController::class);
