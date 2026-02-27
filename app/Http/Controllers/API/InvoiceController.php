@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class InvoiceController extends Controller
 {
@@ -110,8 +111,8 @@ class InvoiceController extends Controller
             'status' => $request->status,
             'notes' => $request->notes,
             'contract_client_id' => $request->contract_client_id,
-            'created_by' => auth()->id(),
-            'updated_by' => auth()->id(),
+            'created_by' => Auth::id(),
+            'updated_by' => Auth::id(),
         ]);
 
         return response()->json([
@@ -197,7 +198,7 @@ class InvoiceController extends Controller
             'status' => $request->status ?? $invoice->status,
             'notes' => $request->notes ?? $invoice->notes,
             'contract_client_id' => $request->contract_client_id ?? $invoice->contract_client_id,
-            'updated_by' => auth()->id(),
+            'updated_by' => Auth::id(),
         ]);
 
         return response()->json([
@@ -224,7 +225,7 @@ class InvoiceController extends Controller
         // Check authorization
         $this->authorize('delete', $invoice);
 
-        $invoice->update(['deleted_by' => auth()->id()]);
+        $invoice->update(['deleted_by' => Auth::id()]);
         $invoice->delete();
 
         return response()->json([

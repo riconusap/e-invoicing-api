@@ -40,6 +40,7 @@ class AuthController extends Controller
             return response()->json(['error' => 'Invalid credentials'], 401);
         }
 
+        /** @var \App\Models\User $user */
         $user = auth('api')->user();
 
         // Clean up expired sessions first
@@ -97,6 +98,7 @@ class AuthController extends Controller
 
     public function logout()
     {
+        /** @var \App\Models\User|null $user */
         $user = auth('api')->user();
 
         if ($user) {
@@ -119,6 +121,7 @@ class AuthController extends Controller
 
     public function isLoggedIn()
     {
+        /** @var \App\Models\User|null $user */
         $user = auth('api')->user();
 
         if (!$user) {
@@ -145,6 +148,7 @@ class AuthController extends Controller
 
     public function loginInfo()
     {
+        /** @var \App\Models\User|null $user */
         $user = auth('api')->user();
 
         if (!$user) {
@@ -174,6 +178,7 @@ class AuthController extends Controller
 
     public function logoutAllExceptCurrent()
     {
+        /** @var \App\Models\User|null $user */
         $user = auth('api')->user();
 
         if (!$user) {
@@ -222,6 +227,7 @@ class AuthController extends Controller
 
     public function logoutFromAllDevices()
     {
+        /** @var \App\Models\User|null $user */
         $user = auth('api')->user();
 
         if (!$user) {
@@ -245,6 +251,7 @@ class AuthController extends Controller
 
     public function getActiveSessions()
     {
+        /** @var \App\Models\User|null $user */
         $user = auth('api')->user();
 
         if (!$user) {

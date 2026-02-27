@@ -17,6 +17,7 @@ class CleanExpiredSessions
     {
         // Only clean sessions for authenticated users
         if (auth('api')->check()) {
+            /** @var \App\Models\User $user */
             $user = auth('api')->user();
             $user->cleanExpiredSessions();
         }

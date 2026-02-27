@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class PlacementController extends Controller
 {
@@ -72,8 +73,8 @@ class PlacementController extends Controller
             'name' => $request->name,
             'description' => $request->description,
             'client_id' => $request->client_id,
-            'created_by' => auth()->id(),
-            'updated_by' => auth()->id(),
+            'created_by' => Auth::id(),
+            'updated_by' => Auth::id(),
         ]);
 
         return response()->json([
@@ -141,7 +142,7 @@ class PlacementController extends Controller
             'name' => $request->name ?? $placement->name,
             'description' => $request->description ?? $placement->description,
             'client_id' => $request->client_id ?? $placement->client_id,
-            'updated_by' => auth()->id(),
+            'updated_by' => Auth::id(),
         ]);
 
         return response()->json([
@@ -168,7 +169,7 @@ class PlacementController extends Controller
         // Check authorization
         $this->authorize('delete', $placement);
 
-        $placement->update(['deleted_by' => auth()->id()]);
+        $placement->update(['deleted_by' => Auth::id()]);
         $placement->delete();
 
         return response()->json([

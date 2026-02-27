@@ -6,6 +6,46 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property int $id
+ * @property string $uuid
+ * @property string $name
+ * @property string $description
+ * @property int $client_id
+ * @property int|null $created_by
+ * @property int|null $updated_by
+ * @property int|null $deleted_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \App\Models\Client $client
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ContractClient> $contractClients
+ * @property-read int|null $contract_clients_count
+ * @property-read \App\Models\User|null $createdBy
+ * @property-read \App\Models\User|null $deletedBy
+ * @property-read \App\Models\PicExternal|null $picExternal
+ * @property-read \App\Models\Employee|null $picInternal
+ * @property-read \App\Models\User|null $updatedBy
+ * @method static \Database\Factories\PlacementFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Placement newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Placement newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Placement onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Placement query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Placement whereClientId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Placement whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Placement whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Placement whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Placement whereDeletedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Placement whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Placement whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Placement whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Placement whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Placement whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Placement whereUuid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Placement withTrashed(bool $withTrashed = true)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Placement withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Placement extends Model
 {
     use HasFactory, SoftDeletes;

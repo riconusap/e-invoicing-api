@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\PicExternal;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
@@ -75,8 +76,8 @@ class PicExternalController extends Controller
             'position' => $request->position,
             'phone' => $request->phone,
             'email' => $request->email,
-            'created_by' => auth()->id(),
-            'updated_by' => auth()->id(),
+            'created_by' => Auth::id(),
+            'updated_by' => Auth::id(),
         ]);
 
         return response()->json([
@@ -146,7 +147,7 @@ class PicExternalController extends Controller
             'position' => $request->position ?? $picExternal->position,
             'phone' => $request->phone ?? $picExternal->phone,
             'email' => $request->email ?? $picExternal->email,
-            'updated_by' => auth()->id(),
+            'updated_by' => Auth::id(),
         ]);
 
         return response()->json([
@@ -173,7 +174,7 @@ class PicExternalController extends Controller
         // Check authorization
         $this->authorize('delete', $picExternal);
 
-        $picExternal->update(['deleted_by' => auth()->id()]);
+        $picExternal->update(['deleted_by' => Auth::id()]);
         $picExternal->delete();
 
         return response()->json([

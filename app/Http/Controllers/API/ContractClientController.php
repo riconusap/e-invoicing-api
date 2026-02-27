@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class ContractClientController extends Controller
 {
@@ -80,8 +81,8 @@ class ContractClientController extends Controller
             'start_on' => $request->start_on,
             'ends_on' => $request->ends_on,
             'project_type' => $request->project_type,
-            'created_by' => auth()->id(),
-            'updated_by' => auth()->id(),
+            'created_by' => Auth::id(),
+            'updated_by' => Auth::id(),
         ]);
 
         return response()->json([
@@ -153,7 +154,7 @@ class ContractClientController extends Controller
             'start_on' => $request->start_on ?? $contract->start_on,
             'ends_on' => $request->ends_on ?? $contract->ends_on,
             'project_type' => $request->project_type ?? $contract->project_type,
-            'updated_by' => auth()->id(),
+            'updated_by' => Auth::id(),
         ]);
 
         return response()->json([
@@ -180,7 +181,7 @@ class ContractClientController extends Controller
         // Check authorization
         $this->authorize('delete', $contract);
 
-        $contract->update(['deleted_by' => auth()->id()]);
+        $contract->update(['deleted_by' => Auth::id()]);
         $contract->delete();
 
         return response()->json([

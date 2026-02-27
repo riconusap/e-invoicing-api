@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class ContractEmployeeController extends Controller
 {
@@ -121,8 +122,8 @@ class ContractEmployeeController extends Controller
             'no_bpjskes' => $request->no_bpjskes,
             'employee_id' => $employee->id,
             'placement_id' => $placement->id,
-            'created_by' => auth()->id(),
-            'updated_by' => auth()->id(),
+            'created_by' => Auth::id(),
+            'updated_by' => Auth::id(),
         ]);
 
         return response()->json([
@@ -226,7 +227,7 @@ class ContractEmployeeController extends Controller
             'no_bpjskes' => $request->no_bpjskes ?? $contract->no_bpjskes,
             'employee_id' => $employee->id ?? $contract->employee_id,
             'placement_id' => $placement->id ?? $contract->placement_id,
-            'updated_by' => auth()->id(),
+            'updated_by' => Auth::id(),
         ]);
 
         return response()->json([
@@ -253,7 +254,7 @@ class ContractEmployeeController extends Controller
         // Check authorization
         $this->authorize('delete', $contract);
 
-        $contract->update(['deleted_by' => auth()->id()]);
+        $contract->update(['deleted_by' => Auth::id()]);
         $contract->delete();
 
         return response()->json([

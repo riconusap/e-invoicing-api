@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use App\Models\Employee;
 use App\Models\ContractEmployee;
 use App\Models\Placement;
@@ -112,7 +113,7 @@ class EmployeeController extends Controller
                 ]
             ]);
         } catch (\Exception $e) {
-            \Log::error('Failed to fetch employees', ['error' => $e->getMessage()]);
+            Log::error('Failed to fetch employees', ['error' => $e->getMessage()]);
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to fetch employees'

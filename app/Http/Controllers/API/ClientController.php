@@ -9,6 +9,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+
 
 class ClientController extends Controller
 {
@@ -86,8 +88,8 @@ class ClientController extends Controller
             'pic_name' => $request->pic_name,
             'pic_phone' => $request->pic_phone,
             'pic_email' => $request->pic_email,
-            'created_by' => auth()->id(),
-            'updated_by' => auth()->id(),
+            'created_by' => Auth::id(),
+            'updated_by' => Auth::id(),
         ]);
 
         return response()->json([
@@ -177,7 +179,7 @@ class ClientController extends Controller
             'pic_name' => $request->pic_name ?? $client->pic_name,
             'pic_phone' => $request->pic_phone ?? $client->pic_phone,
             'pic_email' => $request->pic_email ?? $client->pic_email,
-            'updated_by' => auth()->id(),
+            'updated_by' => Auth::id(),
         ]);
 
         return response()->json([
@@ -209,7 +211,7 @@ class ClientController extends Controller
             Storage::disk('public')->delete($client->logo);
         }
 
-        $client->update(['deleted_by' => auth()->id()]);
+        $client->update(['deleted_by' => Auth:: id()]);
 
         $client->delete();
 
